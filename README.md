@@ -3,3 +3,4 @@ This is minaly intedented for undergraduate researchers working with me, but nee
 
 ## Tutorals
 * [Manipulating Dataframes](manipulatedf.md)
+* [Making simple maps](mapRanges.md)
