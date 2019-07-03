@@ -1,0 +1,8 @@
+city	lat	lat
+San Francisco	37.783333	-122.416667
+San Diego	32.715	-117.1625
+Los Angeles	34.05	-118.25
+Newport, OR	44.6	-124.05
+Portland	45.52	-122.681944
+Seattle	47.609722	-122.333056
+Port Angeles, WA	48.113056	-123.440833
