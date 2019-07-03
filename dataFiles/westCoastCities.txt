@@ -1,4 +1,4 @@
-city	lat	lat
+city	lat	lng
 San Francisco	37.783333	-122.416667
 San Diego	32.715	-117.1625
 Los Angeles	34.05	-118.25
