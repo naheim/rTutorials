@@ -35,10 +35,18 @@ axis(side=4, at=pretty(latRange)) # add axis to right side
 mtext("Longitude", side=4, line=2, las=0) # y-axis label
 
 # add the map
-map('worldHires', xlim=lngRange, ylim=latRange, fill=TRUE, col='gray', add=TRUE)
+map('worldHires', xlim=lngRange, ylim=latRange, fill=TRUE, col='gray', add=TRUE, lwd=0.5, )
 
 # add the cities
 points(cities$lng, cities$lat, pch=8, col='red', cex=1.25)
-text(cities$lng, cities$lat, labels=cities$
+text(cities$lng, cities$lat, labels=cities$city, cex=0.75, col='red', pos=4) # add labels, pos=4 puts labels to right of points
+
+# add the second panel of latitudinal ranges
+# we'll use segment for this rather than writing a loop!
+par(mar=c(4,0.2,0.2,0.2), las=1) # reset margins, not both right and left margins are reduced so the two panels are close together.
+
+plot(1:10, type="n", xlim=c(1, nrow(species)), ylim=latRange, xaxt="n", xlab="Species", yaxt="n", ylab="") # supressing axes because the x axis is just a species idens and the y-axis is taken from the map!
+
+segments(1:nrow(species), species$sLat, 1:nrow(species), species$nLat, lwd=3, col='blue')
 
 ````
