@@ -1,4 +1,4 @@
-# Working with and manipulating large data frames to aggreate and summarize data.
+# Working with R, including manipulating large data frames to aggreate and summarize data.
 
 ## Table of contents
 
@@ -16,14 +16,14 @@
 
 ## <a name="goals"></a>Exercise Goals
 
-The goal of this exercise is to become paractice using R with some practical examples that will be invaluable for your research project. By the end of the exercise you should know how to read in a data frame from a text file, use simple functions means, log-transform your data, and generate a histogram. 
+The goal of this exercise is to become familiar using R with some practical examples that will be invaluable for your research project. By the end of the exercise you should know how to read in a data frame from a text file, use simple functions, log-transform your data, and generate a histogram. 
 
 Specifically, you will reproduce Figure 1 from [Heim *et al.* (2015)](seyibExercises/ReadingExercises/papers/HeimEtAl2015.pdf). This figure depicts the size history of marine animals over the Phanerozoic. The x-axis is geologic time and the y-axis is the biovolume in units of log<sub>10</sub> mm^3 . The length of each horizontal line depicts the total stratigraphic range of each genus in the dataset and the position on the y-axes indicates size. The colors indicate the phylum to which each genus belongs
 
 ![Heim et al. 2015 Figure 1](HeimFig01.png)
 
 **Fig. 1. Body size evolution across the past 542 million years.** The distribution of fossil marine animal biovolumes across the Phanerozoic is shown. The colored horizontal lines show genus durations. The thick black line indicates the stage-level mean body size. The thin black lines demarcate the 5th and 95th percentiles. Cm, Cambrian; O, Ordovician; S, Silurian; D, Devonian; C, Carboniferous; P, Permian; Tr, Triassic; J, Jurassic; K, Cretaceous; Pg, Paleogene; N, Neogene.
-## <a name="basics"></a>R Basics (a review)
+## <a name="basics"></a>R Basics
 
 There are several data types in R, and those data types can be stored in memory as several different object types. The three most common data types are intuitive to understand: numeric, character, logical. Numeric data are, as the name implies, numbers. The numbers can be integers, decimal numbers, and positive or negative. Unlike some other programming languages, R does not differentiate between different numeric types such as integers, floating point, etc. The easiest way to think of character data is as words. Most other programming languages refer to the character type as strings. Examples of characters are “a”, “what time is it”, and “56”. Note the use of quotes. When R displays character data to you, it will always be in quotes. So if you seen a number by itself in quotes, it is a character and not a number—as a consequence you can perform mathematical operations on it. Finally there is the logical data type. Logical data only indicates true and false. In other languages, this data type is frequently referred to as boolean. There is also a common data type called a factor, but we’ll not worry about those for now.
 
