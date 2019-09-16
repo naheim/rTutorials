@@ -142,6 +142,16 @@ My preferred plotting symbol is a solid circle: pch=16. However, there are 25 po
 > text(x=1:25, y=0:24, labels=1:25) # adds labels below the points
 ````
 
+## <a name="reading"></a>Start of with Good Habits!
+An absolute necessity for R to be a useful tool, is the construction of scripts. In the context computer languages, a script is a series of commands that can be exectuted in a program--in our case R. An R script is written and saved as a plain text file. When you are working on a problems set or research project, you should always construct a script. The benefit of a script is that it saves your work. Imageine you are working on a project that requires many steps: read in data, reformat data, run multiple statistical analyses, and finally construct one or more plots. A script allows you to have all of the relevant commands saved in one space so you can work on it later or come back another time to make modifications. Trust me, you don't want to spend time rewriting commands over and over every time you take a break from coding.
+
+One of the most important aspects of writing a script is being dilligent about writing comments. Remember comments are everything on a line that is written after a hashtag (`#`). Comments are a great way to leave notes for yourself and others on what each part of your script does.
+
+A final tip on writing scripts is to keep them neat. A normal part of coding is trial and error to get some functions or processes to work properly. THis is fine and adding new lines to your script as you do this is a fine practice. However, once you solve your problem, you should delete all the lines that do not work and leave yourself a detailed note explaining how your code works. Once you are finished writing a script, you should be able to run it and it should only produce the final output you're looking for--not all the errors and dead ends you made to get there.
+
+To start a new script in R, follow *File > New Document* or click on the blank page icon.
+
+
 ## <a name="reading"></a>Reading in the Dataset
 
 Now that you understand the basic data and object types along with some basic manipulations and plotting, you are ready to read in some real data. The dataset we will use is the marine animal body size data from Heim et al. (2015). The file is permanently stored at the Stanford Digital Repository, hosted by Stanford University Libraries. You can find and download the file at [http://purl.stanford.edu/rf761bx8302](http://purl.stanford.edu/rf761bx8302); the file you want is called *supplementary_data_file.txt* and is a tab-delimited file. Tab delimited files are a plain-text format, but structured like a spreadsheet with tabs separating each cell of the table. This is very similar to the more commonly used comma-separated files (csv). The file is approximately 2.3 Mb in size.
