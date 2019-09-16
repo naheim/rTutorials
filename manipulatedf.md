@@ -149,7 +149,7 @@ Now that you understand the basic data and object types along with some basic ma
 Once you have downloaded the file, save it to the working directory you will be using for this exercise. Open R and set the working directory to the one you are using for the exercise. You can set the working director in two ways. The first uses the keyboard shortcut cmmd-D (may be different in Windows), which will open a Finder window and you can navigate to your desired directory. The second method uses the setwd() function (see the section on functions in the Holland tutorial). In Mac and Windows, respectively, your command will look something similar to the following: 
 
 ````r
-> setwd("/Users/hol/[your folder name here]") # Mac
+> setwd("/path/to/my/directory") # Mac
 > setwd("c:/path/to/my/directory/") # Windows.
 ````
 
