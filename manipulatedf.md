@@ -142,6 +142,14 @@ My preferred plotting symbol is a solid circle: pch=16. However, there are 25 po
 > text(x=1:25, y=0:24, labels=1:25) # adds labels below the points
 ````
 
+### Variable questions:
+1. Let's say you have a matrix named bestData. How would you get the value stored in the 7<sup>th</sup> column, 12<sup>th</sup> row?
+
+2. Lets say you have a vector called beanHeights. It has 4 values, each representing the height of your bean plants in feet. You want to convert the heights to inches. How would you go about doing that with the shortest bit of code?
+
+3. Lets say you also have a vector with 4 values called beanHeightsJune that has your bean plant heights from June. How would you go about calculating the June heights as a proportion of their heights today?
+
+
 ## <a name="reading"></a>Start of with Good Habits!
 An absolute necessity for R to be a useful tool, is the construction of scripts. In the context computer languages, a script is a series of commands that can be exectuted in a program--in our case R. An R script is written and saved as a plain text file. When you are working on a problems set or research project, you should always construct a script. The benefit of a script is that it saves your work. Imageine you are working on a project that requires many steps: read in data, reformat data, run multiple statistical analyses, and finally construct one or more plots. A script allows you to have all of the relevant commands saved in one space so you can work on it later or come back another time to make modifications. Trust me, you don't want to spend time rewriting commands over and over every time you take a break from coding.
 
@@ -180,7 +188,7 @@ The first thing I always do after reading in a new dataset, is take a look at it
 
 You have already seen ``dim()``, but ``head()`` is also very useful. Because sizeData has more than 17,000 rows, if you were to just type sizeData, R would try to show you all 17,000+ rows. The head() function returns the first 6 rows only. This gives you a chance to make sure the column names were read in correctly and that the values of each column appear to be in the correct format. Take a few minutes to make sure you understand what the columns in the data frame are and how you might use them in constructing your plot.
 
-You also need to read in a second tab-delimited file called *timescale.txt*. The file can be downloaded directly from GitHub: [paleosizePaper/rawDataFiles/timescale.txt](https://raw.githubusercontent.com/naheim/paleosizePaper/master/rawDataFiles/timescale.txt). Once you have read the file into R, use head to examine the types of information included in the data frame. Make sure you understand each column in the data frame.
+You also need to read in a second tab-delimited file called *timescale.txt*. The file can be downloaded directly from GitHub: [https://raw.githubusercontent.com/naheim/rTutorials/master/dataFiles/timescale.txt](https://raw.githubusercontent.com/naheim/rTutorials/master/dataFiles/timescale.txt). Once you have read the file into R, use head to examine the types of information included in the data frame. Make sure you understand each column in the data frame.
 
 ````r
 > timescale <- read.delim(file='timescale.txt')
