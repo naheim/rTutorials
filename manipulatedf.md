@@ -25,18 +25,18 @@ Specifically, you will reproduce Figure 1 from [Heim *et al.* (2015)](seyibExerc
 **Fig. 1. Body size evolution across the past 542 million years.** The distribution of fossil marine animal biovolumes across the Phanerozoic is shown. The colored horizontal lines show genus durations. The thick black line indicates the stage-level mean body size. The thin black lines demarcate the 5th and 95th percentiles. Cm, Cambrian; O, Ordovician; S, Silurian; D, Devonian; C, Carboniferous; P, Permian; Tr, Triassic; J, Jurassic; K, Cretaceous; Pg, Paleogene; N, Neogene.
 ## <a name="basics"></a>R Basics
 
-There are several data types in R, and those data types can be stored in memory as several different object types. The three most common data types are intuitive to understand: numeric, character, logical. Numeric data are, as the name implies, numbers. The numbers can be integers, decimal numbers, and positive or negative. Unlike some other programming languages, R does not differentiate between different numeric types such as integers, floating point, etc. The easiest way to think of character data is as words. Most other programming languages refer to the character type as strings. Examples of characters are “a”, “what time is it”, and “56”. Note the use of quotes. When R displays character data to you, it will always be in quotes. So if you seen a number by itself in quotes, it is a character and not a number—as a consequence you can perform mathematical operations on it. Finally there is the logical data type. Logical data only indicates true and false. In other languages, this data type is frequently referred to as boolean. There is also a common data type called a factor, but we’ll not worry about those for now.
+There are several data types in R, and those data types can be stored in memory as several different object types. The three most common data types are intuitive to understand: numeric, character, logical. Numeric data are, as the name implies, numbers. The numbers can be integers, decimal numbers, and positive or negative. Unlike some other programming languages, R does not differentiate between different numeric types such as integers, floating point, etc. The easiest way to think of character data is as words. Most other programming languages refer to the character type as strings. Examples of characters are “a”, “what time is it”, and “56”. Note the use of quotes. When R displays character data to you, it will always be in quotes. So if you seen a number by itself in quotes, it is a character and not a number—as a consequence you can perform mathematical operations on it. Finally there is the logical data type. Logical data only indicates true and false. In other languages, this data type is frequently referred to as Boolean. There is also a common data type called a factor, but we’ll not worry about those for now.
 
-Now that you understand the basic data types, let’s look at the types of objects R uses to store data. The four most common are variables, vectors, matrices, and data frames. Let’s go through the one-by-one.
+Now that you understand the basic data types, let’s look at the types of objects R uses to store data. The four most common are scalars, vectors, matrices, and data frames. Let’s go through them one-by-one.
 
-**Variables**—Variables store a single value, which can be either a numeric or a character. There are two ways to assign values to variables (and the other data object types). You can either use and equals sign or a left-pointing arrow (<-). Although the equals sign is more familiar, I prefer the arrow. I use the equals sign only for assigning values to parameters within function calls, but you are free to use whichever notation you prefer. Below we assign the value of 7 to a variable called x using both notations. Try it out. After you have assigned a value to your variable, type x to see that it returns the value you assigned.
+**Scalar**—Scalars store a single value, which can be one of several types. There are two ways to assign values to scalars (and the other data object types). You can either use an equals sign or a left-pointing arrow (<-). Although the equals sign is more familiar, I prefer the arrow. The convention in R is to use the equals sign only for assigning values to parameters within function calls, but you are free to use whichever notation you prefer. Below we assign the value of 7 to a scalar called x using both notations. Try it out. After you have assigned a value to your variable, type x to see that it returns the value you assigned.
 
 ````r
 x <- 7 # arrow notation
 x = 7 # equals sign notation
 ````
 
-When copying and pasting code, do not include the prompt symbol (>), this just indicates a new line and will give you an error run in the command line. Working with variables should be intuitive, and you can perform arithmetic on variables with numeric values. Below are some examples of simple mathematical operations using variables.
+Working with scalars should be intuitive, and you can perform arithmetic on variables with numeric values. Below are some examples of simple mathematical operations using scalars.
 
 ````r
 x <- 2
@@ -48,9 +48,9 @@ y + 8 # returns a value of 12
 z <- x * y^3 # assigning z the value of x times the cube of y, 128
 ````
 
-Note the use of the comment character (#) above. Every thing on a single line (before you hit return) that appears after the # is not run by R. This is very useful for annotating you code so that you can quickly and easily remember what your code does, even after you haven’t looked at if for a long period of time. USE COMMENTS. It is also worth noting that R follows the order of operations—this is very important so review them if you have forgotten them.
+Note the use of the comment character (#) above. Everything on a single line (before you hit return) that appears after the # is not run by R. This is very useful for annotating you code so that you can quickly and easily remember what your code does, even after you haven’t looked at if for a long period of time. USE COMMENTS. It is also worth noting that R follows the order of operations—this is very important so review them if you have forgotten them.
 
-This is a good point to show some examples of the data types, by assigning different types to a variable. The examples above are all of numeric types, but here are some examples to try with character and logical data types. 
+The examples above are all of numeric types, but here are some examples to try with character and logical data types. 
 
 ````r
 x <- "b" # this is a character variable
@@ -58,24 +58,28 @@ x <- "this is also a Character 56?*_wow"
 ````
 Note that if you leave out the quotes, R will think b is a variable and you will get an error—unless you already have a data object called b, then R will assign x the value of b.
 
+Logicals: Logicals, also called Booleans, are objects that have either a value of 'true' or 'false'. These are useful for comparisons. For example, is x greater than 12. The response will be a logical, or Boolean. 
+
 ````r
 y <- TRUE # this is a logical with the value true
 y <- T # this is also a logical with the value true
+y <- t # this will not return an error, but it is also not a Boolean. t is the name given to the build-in transpose function, and you have made y a new object that is the transpose function; now you can use y() as you would t(). However, you should avoid using names already used by functions in base R or packages you are using. 
 
 z <- FALSE # this is a logical with the value false
 z <- F # this is also a logical with the value false
+z <- f # this will return an error, unless f is a previously-defined object
 ````
 
 Note that for logicals, you must use all caps and no quotes.
 
-**Vectors**—Vectors are a series of values, all of the same type (i.e., numeric, character, logical) all stored in the same object. In other programming languages they are often called one-dimensional arrays or more simply arrays. If a vector is filled with numeric values, you can perform mathematical operations on it.
+**Vectors**—Vectors are a series of values, all of the same type (i.e., numeric, character, logical) all stored in the same object. In fact, vectors are simply scalars with multiple values. In other programming languages they are often called arrays or one-dimensional arrays. If a vector is filled with numeric values, you can perform mathematical operations with it.
 
 ````r
 x <- 3:9 # creates a vector with all the integers from 2 to 9, inclusive
 x * 2 # multiplies every value in x by 2
 ````
 
-In addition to performing arithmetic on a vector, we can also extract a certain subset of values using the square bracket notation ([]). For example, use the following to extract the 3rd value of x.
+In addition to performing arithmetic on a vector, we can also extract a certain subset of values using the square bracket notation ([]). For example, use the following to extract the 3<sup>rd</sup> value of x.
 
 ````r
 x[3] # returns the 3rd value of x, which is a 5
@@ -201,10 +205,6 @@ head(timescale)
 timescale <- read.delim(file='https://raw.githubusercontent.com/naheim/paleosizePaper/master/rawDataFiles/timescale.txt')
 ````
 
-## <a name="makePlot"></a>Making Your Plot
-
-Your version of Figure 1 will be somewhat simplified compared to the published version. You should have the x-axis oriented in the proper direction (i.e., 550 Myr on the left and 0 Myr on the right—after all, we are paleobiologist and not geochemists!). Your x-axis will not have the boxes at the bottom with the geologic periods labeled—I made those with a function that I wrote. I’m happy to share the function, but it is not straightforward to use, so let’s put that off and just have a plain numeric axis. Additionally, in your first attempt at the plot you do not need to include colors for the different phyla. However, once you get your plot made and you have the time and motivations, see if you can figure out how to add the colors. I am not going to just give you the code to make the plots here. I want you to figure it out. To get you started, there are a few questions to ensure you understand the data frame, a list of general steps, and a list of functions that will be useful. You may also find it useful to read the section below titled “Note on Working with Stratigraphic Ranges”.
-
 ### Data frame questions:
 1. What is the column name for the size data you will plot?
 
@@ -214,6 +214,67 @@ Your version of Figure 1 will be somewhat simplified compared to the published v
 
 
 
+## <a name="loops"></a> Writing Loops
+
+Loops are a programming tool that let you do the same calculation or set of calculations over and over again.  There are several types of loops, but we will use just the for loop.  It is simple and can do most tasks you’ll need.  In R the for loop has three basic parameters: a counting variable, a starting value and an ending value.  Here is a very simple loop that just prints the counting variable to your screen.  Run it to see what it does.
+
+````r
+for(i in 1:10) {
+	print(i)
+}
+````
+
+In the above code, ``i`` is the counting variable, 1 is the starting value and 10 is the ending value.  The loop starts by setting your counting variable equal to the stating value.  Next it does whatever you have put inside the curly braces, {}.  In the above example all we told the loop to do was print (to the screen) the counting variable.  Notice that it prints the actual number, not the letter i.  After it completes everything inside the curly braces it adds 1 to ``i``, then goes back to the top of the code inside the curly braces and performs it agin this time with the new value of i.  The loop stops when i equals the ending value and the code inside the curly braces is completed.  Notice the loop above stopped at 10 and did not print 11.
+
+You can put whatever you want inside the curly braces of loop.  This is useful for calculating the same thing for different subsets of data.  For your research project, you will likely want to loop through the timescale to calculate things like the number of genera or mean body size within an interval.  Here is another very simple loop that goes through the geological time scale calculating the duration of each interval.
+
+````r
+# step 1: create a variable to save your results
+durations <- vector(mode="numeric", length=nrow(timescale)) # note the use of nrow() to determine the vector length
+for(i in 1:nrow(timescale)) { # set up the loop, again note the use of nrow() to determine how many times to loop
+	durations[i] <- timescale$age_bottom[i] - timescale$age_top[i] # assign durations to our vector
+}
+````
+
+Notice nothing was printed to the screen.  This is because we didn’t tell the loop to print anything.  To see if it worked, make a histogram of durations.  Does it look like the one you made yesterday?
+
+````r
+hist(durations)
+````
+
+
+## <a name="stratData"></a> Note on Working with Stratigraphic Ranges
+
+Working with stratigraphic ranges can be tricky, mostly because you need to develop the logic for extracting the genera that are extant (or go extinct, or originate) during any given geological stage. This following explanation will be helpful in subsetting your body size data frame as you are loop through each of the 90+ geologic stages. The challenge is extracting only those genera that are extant in each interval. The figure below is useful in developing the necessary logic. The two vertical lines represent the boundaries of a time interval, with the oldest boundary on the left and the youngest on the right. The horizontal lines represent the 4 possible relationships between taxon ranges and time interval boundaries.
+
+Here is some important terminology. The time that a taxon first appears in the fossil record is called its first appearance datum (FAD); the time of its extinction is called its last appearance datum (LAD). The column of FADs in the size data frame is called fad_age and the column for LADs is called lad_age. In timescale, the column for the age of the bottom of each interval is called age_bottom and the column for the tops of intervals is called age_top. The general logic we want for selecting the genera that exist in any arbitrary interval is as follows:
+
+* Let’s call the interval we are interested in *i*.
+* We want all genera with a *fad_age* that is older than the age_top of *i* 
+* AND a *lad_age* that is younger than the age_bottom of *i*.
+
+Now let’s convert this verbal logic into some R code! Remember, we will want to use the $-notation get data from specific columns.
+
+````r
+> sizeData[sizeData $fad_age > timescale$age_top[i] & sizeData $lad_age < timescale$age_bottom[i], ]
+````
+![Foote 2000 Figure 1](FooteFig01.png)
+
+Now, convince yourself that this logic will select all genera within a time interval and none of the genera whose ranges are either entirely older or entirely younger than the interval. Refer to the above figure if you need, or draw your own.
+
+## <a name="makePlot"></a>Making Your Plot
+
+Your version of Figure 1 will be somewhat simplified compared to the published version. You should have the x-axis oriented in the proper direction (i.e., 550 Myr on the left and 0 Myr on the right—after all, we are paleobiologist and not geochemists!). Your x-axis will not have the boxes at the bottom with the geologic periods labeled—I made those with a function that I wrote. I’m happy to share the function, but it is not straightforward to use, so let’s put that off and just have a plain numeric axis. Additionally, in your first attempt at the plot you do not need to include colors for the different phyla. However, once you get your plot made and you have the time and motivations, see if you can figure out how to add the colors. I am not going to just give you the code to make the plots here. I want you to figure it out. To get you started, there are a few questions to ensure you understand the data frame, a list of general steps, and a list of functions that will be useful. You may also find it useful to read the section below titled “Note on Working with Stratigraphic Ranges”.
+
+#### Some functions you will find useful
+* ``mean()``
+* ``plot()``
+* ``segments()``
+* ``lines()``
+* ``sort()``
+* ``quantile()``
+
+
 ### Steps for creating your plot.
 Planning out your code is very important. Below I outline all the steps required to generate the plot. This is not code, but rather a plan for executing your code. Remember, most commands much be executed in the proper order. For example you can't plot your data until you have read in a data file. Writing out a list if steps in 'English' first and in the proper order, is key minimizing frustration in coding. Once you have you list, you can convert you English list to comments and start adding the actual code.
 
@@ -221,17 +282,15 @@ Planning out your code is very important. Below I outline all the steps required
 
 * Make sure you have read in the timescale data frame from the file called *timescale.txt*. Make sure you understand what is in this data frame.
 
+* Calculate the mean size of all animals in each of the geologic time interval (i.e., rows in the geologic timescale object you just read in). You will need to write a loop.
+
+* Calculate the 5<sup>th</sup> and 95<sup>th</sup> percentile of genus sizes in each of the geologic time intervals. You can and should include this in same loop you use for the mean. The ``sort()`` or ``quantile()`` functions may be helpful.
+
 * Open a plot window and set the x and y limits of the plot as well as the x and y axis labels. You may want to set ``type="n"``. The help file for plot.default may be helpful. To get a proper time axis you will want to set the xlim parameter.
 
 * Plot horizontal lines for each genus. The position on the y-axis will correspond to the size of the genus, the starting position on the x-axis will correspond to the time of origination, and the end position will be the time of extinction. For a hint look up the help page for the ``segments()`` function. Considering the sizeData data frame, what are the vectors you will put into your code for the *x0*, *y0*, *x1* and *y1* parameters? 
 
-* Once you have a base plot made, calculate the mean size of all animals in each of the geologic time interval (i.e., rows in the geologic timescale object you just read in). You may need to write a loop (see below).
-
-* Calculate the 5^th and 95^th quantile of genus sizes in each of the geologic time intervals. You may want to include this in same loop you use for the mean. The ``sort()`` or ``quantile()`` functions may be helpful.
-
-* Add lines to your plot for the 5^th size quantile, 95^th size quantile, and mean size. You should probably make these lines a color other than black.
-
-* If you have time, modify your code to give a different color to the genus lines that correspond to the different phyla.
+* Add lines to your plot for the 5<sup>th</sup> size percentile, 95<sup>th</sup> size percentile, and mean size. You should probably make these lines a color other than black.
 
 
 ## <a name="tableapply"></a>Table & Apply Functions
