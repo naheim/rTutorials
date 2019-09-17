@@ -1,4 +1,4 @@
-# Working with R, including manipulating large data frames to aggreate and summarize data.
+# Working with R, including manipulating large data frames to aggregate, summarize, and visualize data.
 
 ## Table of contents
 
@@ -155,11 +155,11 @@ text(x=1:25, y=0:24, labels=1:25) # adds labels below the points
 
 
 ## <a name="reading"></a>Start of with Good Habits!
-An absolute necessity for R to be a useful tool, is the construction of scripts. In the context computer languages, a script is a series of commands that can be exectuted in a program--in our case R. An R script is written and saved as a plain text file. When you are working on a problems set or research project, you should always construct a script. The benefit of a script is that it saves your work. Imageine you are working on a project that requires many steps: read in data, reformat data, run multiple statistical analyses, and finally construct one or more plots. A script allows you to have all of the relevant commands saved in one space so you can work on it later or come back another time to make modifications. Trust me, you don't want to spend time rewriting commands over and over every time you take a break from coding.
+An absolute necessity for R to be a useful tool, is the construction of scripts. In the context computer languages, a script is a series of commands that can be executed in a program--in our case R. An R script is written and saved as a plain text file. When you are working on a problems set or research project, you should always construct a script. The benefit of a script is that it saves your work. Imagine you are working on a project that requires many steps: read in data, reformat data, run multiple statistical analyses, and finally construct one or more plots. A script keeps all of the relevant commands saved in one document so you can work on it later or come back another time to make modifications. Trust me, you don't want to spend time rewriting commands over and over every time you take a break from coding.
 
-One of the most important aspects of writing a script is being dilligent about writing comments. Remember comments are everything on a line that is written after a hashtag (`#`). Comments are a great way to leave notes for yourself and others on what each part of your script does.
+One of the most important aspects of writing a script is being diligent about writing comments. Remember comments are everything on a line that is written after a hashtag (`#`). Comments are a great way to leave notes for yourself and others on what each part of your script does.
 
-A final tip on writing scripts is to keep them neat. A normal part of coding is trial and error to get some functions or processes to work properly. THis is fine and adding new lines to your script as you do this is a fine practice. However, once you solve your problem, you should delete all the lines that do not work and leave yourself a detailed note explaining how your code works. Once you are finished writing a script, you should be able to run it and it should only produce the final output you're looking for--not all the errors and dead ends you made to get there.
+A final tip on writing scripts is to keep them neat. A normal part of coding is trial and error to get some functions or processes to work properly. This is fine and adding new lines to your script as you do this is a fine practice. However, once you solve your problem, you should delete all the lines that do not work and leave yourself a detailed note explaining how your code works. Once you are finished writing a script, you should be able to run it and it should only produce the final output you're looking for--not all the errors and dead ends you made to get there.
 
 To start a new script in R, follow *File > New Document* or click on the blank page icon.
 
@@ -175,7 +175,7 @@ setwd("/path/to/my/directory") # Mac
 setwd("c:/path/to/my/directory/") # Windows.
 ````
 
-Once you set the working directory, you are ready to read in the file. To read in the file we are going to use the read.delim() function. This function reads in a tab-delimited file and stores it in your current R session as a data frame, if you assign it to a data object. So far in the examples, we have used simple single letter names for data objects (e.g., x, d). These names are not very informative, so I encourage you to give your data objects meaningful names. There are a couple of hare rules for data object names that you must follow. 1) never start an object name with a number: data3 is okay, 3data is not. 2) Do not include any spaces in the object name. 3) The only two special characters you can include are the period (.) and underscore (\_): ``my.data`` and ``my_data`` are good names, ``my/Data`` is not. Using multiple word object names is a fine practice and there are several ways you can do this. I suggest picking one and sticking with it throughout your code. The first is using what id called 'cammel case', in which the first word is lower case and the first letter of all other words is upper case with no spaces, e.g., ``myNewData``. The second is using underscores as in ``my_new_data``. Finally you can use periods, which is as far as I can tell uniquely allowed by R, as in ``my.new.data. Again``, pick one format and stick with it. Some computer programmers have strong opinions about which format to use, but it is really a personal choice. Let’s read in the data file, which I will store in a data frame called sizeData.
+Once you set the working directory, you are ready to read in the file. To read in the file we are going to use the read.delim() function. This function reads in a tab-delimited file and stores it in your current R session as a data frame, if you assign it to a data object. So far in the examples, we have used simple single letter names for data objects (e.g., x, d). These names are not very informative, so I encourage you to give your data objects meaningful names. There are a couple of hare rules for data object names that you must follow. 1) never start an object name with a number: data3 is okay, 3data is not. 2) Do not include any spaces in the object name. 3) The only two special characters you can include are the period (.) and underscore (\_): ``my.data`` and ``my_data`` are good names, ``my/Data`` is not. Using multiple word object names is a fine practice and there are several ways you can do this. I suggest picking one and sticking with it throughout your code. The first is using what id called 'camel case', in which the first word is lower case and the first letter of all other words is upper case with no spaces, e.g., ``myNewData``. The second is using underscores as in ``my_new_data``. Finally you can use periods, which is as far as I can tell uniquely allowed by R, as in ``my.new.data. Again``, pick one format and stick with it. Some computer programmers have strong opinions about which format to use, but it is really a personal choice. Let’s read in the data file, which I will store in a data frame called sizeData.
 
 ````r
 sizeData <- read.delim(file='supplementary_data_file.txt')
@@ -223,7 +223,7 @@ Planning out your code is very important. Below I outline all the steps required
 
 * Open a plot window and set the x and y limits of the plot as well as the x and y axis labels. You may want to set ``type="n"``. The help file for plot.default may be helpful. To get a proper time axis you will want to set the xlim parameter.
 
-* Plot horizontal lines for each genus. The position on the y-axis will correspond to the size of the genus, the starting position on the x-axis will correspond to the time of origination, and the end position will be the time of extinction. For a hint look up the help page for the ``segments()`` function. Consideing the sizeData data frame, what are the vectors you will put into your code for the *x0*, *y0*, *x1* and *y1* parameters? 
+* Plot horizontal lines for each genus. The position on the y-axis will correspond to the size of the genus, the starting position on the x-axis will correspond to the time of origination, and the end position will be the time of extinction. For a hint look up the help page for the ``segments()`` function. Considering the sizeData data frame, what are the vectors you will put into your code for the *x0*, *y0*, *x1* and *y1* parameters? 
 
 * Once you have a base plot made, calculate the mean size of all animals in each of the geologic time interval (i.e., rows in the geologic timescale object you just read in). You may need to write a loop (see below).
 
@@ -236,11 +236,11 @@ Planning out your code is very important. Below I outline all the steps required
 
 ## <a name="tableapply"></a>Table & Apply Functions
 
-Each rown in the dataset we are working with is a genus, and we might want group genera and aggregate or summarize properties of those groups. For simplicity, let's group our genera into Linnaean class then calcualte some body size statistics for each class.
+Each rown in the dataset we are working with is a genus, and we might want group genera and aggregate or summarize properties of those groups. For simplicity, let's group our genera into Linnaean class then calculate some body size statistics for each class.
 
 To do this we want to first create a base data frame that has one row for each class along with a column that indicates the phylum.
 
-One way to do this is to use the ````unique()```` and ````match()```` functions. We will use ````match()```` to get extract the two columns, class & phylum, from sizeData and ````unique()```` to pair down sizeData to only inlucde one row for each phylum-class combination. 
+One way to do this is to use the ````unique()```` and ````match()```` functions. We will use ````match()```` to get extract the two columns, class & phylum, from sizeData and ````unique()```` to pair down sizeData to only include one row for each phylum-class combination. 
 
 ``match()`` Takes two parameters, the first is a vector of items to search for and the second is a vector of item to search in.  It then returns index values that match. Here's an example:
 
@@ -250,7 +250,7 @@ myLetters <- c('N', 'A', 'H') # a vector of three letters to search for
 match(myLetters, LETTERS)
 ````
 
-In the above example ``LETTERS`` is a built in vector of all 26 capital letters. One way to 'read' the match call is that is returns the positions of ``myLetters`` in ``LETTERS``. Indeed that's what we see as the call returns 14, 1, and 18, which corresond to the positions of N, A, and H in the alphabet. Now we can use this function to select the phylum and class functions.
+In the above example ``LETTERS`` is a built in vector of all 26 capital letters. One way to 'read' the match call is that is returns the positions of ``myLetters`` in ``LETTERS``. Indeed that's what we see as the call returns 14, 1, and 18, which correspond to the positions of N, A, and H in the alphabet. Now we can use this function to select the phylum and class functions.
 
 ````r
 # first look at the columns names of sizeData
@@ -303,7 +303,7 @@ Finally we can attache these vectors to classes as new column. However it's impo
 Adding new columns to data frame is easy.  You just need to write the new column names and set the value.
 
 ````r
-classes$nGenera <- nGenera[match(classes$class, names(nGenera))] # here we created a new column 'nGenera' (I could have called it anything, but nGenera is descriptive) and assigned it values from the vector genus counts we created. Double check the new data frame with the nGenera vecto to convince yourself it matched the values properly
+classes$nGenera <- nGenera[match(classes$class, names(nGenera))] # here we created a new column 'nGenera' (I could have called it anything, but nGenera is descriptive) and assigned it values from the vector genus counts we created. Double check the new data frame with the nGenera vector to convince yourself it matched the values properly
 
 # now we can do the same thing for the other vectors
 classes$minSize <- minSize[match(classes$class, names(minSize))]
@@ -326,8 +326,10 @@ R Studio. [https://www.rstudio.com](https://www.rstudio.com).
 
 Holland, S.M. (2017). A Short R Tutorial. [http://strata.uga.edu/software/pdf/Rtutorial.pdf](http://strata.uga.edu/software/pdf/Rtutorial.pdf). [A great general introduction to R].
 
+Zaffos, A. An Introduction to R. A great tutorial with quizzes created for the UW-Madison paleobiology course by Andrew Zaffos. [https://github.com/aazaff/startLearn.R](https://github.com/aazaff/startLearn.R)
+
 R for Palaeontologists. A series of short R tutorials created by members of the UK-based Palaeontological Association (PalAss for short). [https://www.palass.org/publications/newsletter/r-palaeontologists](https://www.palass.org/publications/newsletter/r-palaeontologists).
 
-~~Hunt, G. Data Analysis in Paleontology using R. [http://paleobiology.si.edu/staff/individuals/hunt.cfm](http://paleobiology.si.edu/staff/individuals/hunt.cfm). [Powerpoint slides from a course Gene teaches, a good introduction with paleontological examples].~~ Sadly this appears to have been dissapeared from the Internet. :disappointed:
+~~Hunt, G. Data Analysis in Paleontology using R. [http://paleobiology.si.edu/staff/individuals/hunt.cfm](http://paleobiology.si.edu/staff/individuals/hunt.cfm). [Powerpoint slides from a course Gene teaches, a good introduction with paleontological examples].~~ Sadly this appears to have been disappeared from the Internet. :disappointed:
 
 StackOverflow. [http://stackoverflow.com/questions/tagged/?tagnames=r](http://stackoverflow.com/questions/tagged/?tagnames=r). [A great resource for getting answers to your technical questions. Typing your question into Google frequently returns StackOverflow answers—it is the best online resource for specific questions].
