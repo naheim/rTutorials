@@ -10,7 +10,7 @@
 
 * [Reading in the Dataset](#reading)
 
-* [Writing Loops](#loops)
+* [Loops](#loops)
 
 * [Stratigraphic Ranges](#stratData)
 
@@ -159,9 +159,9 @@ text(x=1:25, y=0:24, labels=1:25) # adds labels below the points
 ### Variable questions:
 1. Let's say you have a matrix named bestData. How would you get the value stored in the 7<sup>th</sup> column, 12<sup>th</sup> row?
 
-2. Lets say you have a vector called beanHeights. It has 4 values, each representing the height of your bean plants in feet. You want to convert the heights to inches. How would you go about doing that with the shortest bit of code?
+2. Let's say you have a vector called beanHeights. It has 4 values, each representing the height of your bean plants in feet. You want to convert the heights to inches. How would you go about doing that with the shortest bit of code?
 
-3. Lets say you also have a vector with 4 values called beanHeightsJune that has your bean plant heights from June. How would you go about calculating the June heights as a proportion of their heights today?
+3. Let's say you also have a vector with 4 values called beanHeightsJune that has your bean plant heights from June. How would you go about calculating the June heights as a proportion of their heights today?
 
 
 ## <a name="writing"></a>Writing Scripts--Start off with Good Habits!
@@ -220,7 +220,7 @@ timescale <- read.delim(file='https://raw.githubusercontent.com/naheim/paleosize
 
 
 
-## <a name="loops"></a> Writing Loops
+## <a name="loops"></a> Loops
 
 Loops are a programming tool that let you do the same calculation or set of calculations over and over again.  There are several types of loops, but we will use just the for loop.  It is simple and can do most tasks you’ll need.  In R the for loop has three basic parameters: a counting variable, a starting value and an ending value.  Here is a very simple loop that just prints the counting variable to your screen.  Run it to see what it does.
 
