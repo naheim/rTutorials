@@ -322,10 +322,12 @@ The built-in help function. To get help understanding a function, type a questio
 ````
 The R Website. [http://r-project.org](http://r-project.org).
 
+R Studio. [https://www.rstudio.com](https://www.rstudio.com).
+
 Holland, S.M. (2017). A Short R Tutorial. [http://strata.uga.edu/software/pdf/Rtutorial.pdf](http://strata.uga.edu/software/pdf/Rtutorial.pdf). [A great general introduction to R].
 
 R for Palaeontologists. A series of short R tutorials created by members of the UK-based Palaeontological Association (PalAss for short). [https://www.palass.org/publications/newsletter/r-palaeontologists](https://www.palass.org/publications/newsletter/r-palaeontologists).
 
-~~Hunt, G. Data Analysis in Paleontology using R. [http://paleobiology.si.edu/staff/individuals/hunt.cfm](http://paleobiology.si.edu/staff/individuals/hunt.cfm). [Powerpoint slides from a course Gene teaches, a good introduction with paleontological examples].~~ Sadly this appeas to have been dissapeared from the Internet. :disappointed:
+~~Hunt, G. Data Analysis in Paleontology using R. [http://paleobiology.si.edu/staff/individuals/hunt.cfm](http://paleobiology.si.edu/staff/individuals/hunt.cfm). [Powerpoint slides from a course Gene teaches, a good introduction with paleontological examples].~~ Sadly this appears to have been dissapeared from the Internet. :disappointed:
 
 StackOverflow. [http://stackoverflow.com/questions/tagged/?tagnames=r](http://stackoverflow.com/questions/tagged/?tagnames=r). [A great resource for getting answers to your technical questions. Typing your question into Google frequently returns StackOverflow answers—it is the best online resource for specific questions].
