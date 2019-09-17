@@ -122,8 +122,12 @@ Let’s deconstruct what we did here. The first term inside the square brackets 
 
 ````r
 d[d$fac == 'B', 2:3] # returns 2nd and 3rd columns from the rows of d with a value of 'B' in the fac column
-Simple Cross Plots—Making a simply x-y plot in R is easy. Here is a simple example where we plot two vectors of random numbers.
+````
 
+**Simple Cross Plots**—Making a simple x-y plot in R is easy. 
+Here is a simple example where we plot two vectors of random numbers. The basic idea is that you call ``plot`` then give it your x-axis values then your y-axis values. There are a bunch of other things you can do to customize you plot and make it more reader-friendly, but that's the gist. 
+
+````r
 myX <- rnorm(100) # a vector of 100 random numbers drawn from a normal distribution
 myY <- rnorm(100) # another vector of 100 random numbers
 plot(myX, myY) # generates a simple cross plot
@@ -204,13 +208,15 @@ Your version of Figure 1 will be somewhat simplified compared to the published v
 ### Data frame questions:
 1. What is the column name for the size data you will plot?
 
-2. what is the column name that indicates the time each genus goes extinct?
+2. What is the column name that indicates the time each genus goes extinct?
 
 3. What is the column name that indicates the time each genus originated?
 
 
 
 ### Steps for creating your plot.
+Planning out your code is very important. Below I outline all the steps required to generate the plot. This is not code, but rather a plan for executing your code. Remember, most commands much be executed in the proper order. For example you can't plot your data until you have read in a data file. Writing out a list if steps in 'English' first and in the proper order, is key minimizing frustration in coding. Once you have you list, you can convert you English list to comments and start adding the actual code.
+
 * Make sure you have read in the size data frame from the file called *supplementary\_data\_file.txt*.
 
 * Make sure you have read in the timescale data frame from the file called *timescale.txt*. Make sure you understand what is in this data frame.
@@ -316,10 +322,10 @@ The built-in help function. To get help understanding a function, type a questio
 ````
 The R Website. [http://r-project.org](http://r-project.org).
 
-Holland, S.M. (2013). A Short R Tutorial. [http://strata.uga.edu/software/pdf/Rtutorial.pdf](http://strata.uga.edu/software/pdf/Rtutorial.pdf). [A great general introduction to R].
+Holland, S.M. (2017). A Short R Tutorial. [http://strata.uga.edu/software/pdf/Rtutorial.pdf](http://strata.uga.edu/software/pdf/Rtutorial.pdf). [A great general introduction to R].
 
-Hunt, G. Data Analysis in Paleontology using R. [http://paleobiology.si.edu/staff/individuals/hunt.cfm](http://paleobiology.si.edu/staff/individuals/hunt.cfm). [Powerpoint slides from a course Gene teaches, a good introduction with paleontological examples]
+R for Palaeontologists. A series of short R tutorials created by members of the UK-based Palaeontological Association (PalAss for short). [https://www.palass.org/publications/newsletter/r-palaeontologists](https://www.palass.org/publications/newsletter/r-palaeontologists).
 
-Stanford R Community. [http://library.stanford.edu/projects/r](http://library.stanford.edu/projects/r). [Learn workshops and training sessions on campus, sign up for the Stanford R email list]
+~~Hunt, G. Data Analysis in Paleontology using R. [http://paleobiology.si.edu/staff/individuals/hunt.cfm](http://paleobiology.si.edu/staff/individuals/hunt.cfm). [Powerpoint slides from a course Gene teaches, a good introduction with paleontological examples].~~ Sadly this appeas to have been dissapeared from the Internet. :disappointed:
 
 StackOverflow. [http://stackoverflow.com/questions/tagged/?tagnames=r](http://stackoverflow.com/questions/tagged/?tagnames=r). [A great resource for getting answers to your technical questions. Typing your question into Google frequently returns StackOverflow answers—it is the best online resource for specific questions].
