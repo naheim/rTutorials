@@ -164,7 +164,7 @@ text(x=1:25, y=0:24, labels=1:25) # adds labels below the points
 3. Lets say you also have a vector with 4 values called beanHeightsJune that has your bean plant heights from June. How would you go about calculating the June heights as a proportion of their heights today?
 
 
-## <a name="writing"></a>Writing Scripts--Start of with Good Habits!
+## <a name="writing"></a>Writing Scripts--Start off with Good Habits!
 An absolute necessity for R to be a useful tool, is the construction of scripts. In the context computer languages, a script is a series of commands that can be executed in a program--in our case R. An R script is written and saved as a plain text file. When you are working on a problems set or research project, you should always construct a script. The benefit of a script is that it saves your work. Imagine you are working on a project that requires many steps: read in data, reformat data, run multiple statistical analyses, and finally construct one or more plots. A script keeps all of the relevant commands saved in one document so you can work on it later or come back another time to make modifications. Trust me, you don't want to spend time rewriting commands over and over every time you take a break from coding.
 
 One of the most important aspects of writing a script is being diligent about writing comments. Remember comments are everything on a line that is written after a hashtag (`#`). Comments are a great way to leave notes for yourself and others on what each part of your script does.
