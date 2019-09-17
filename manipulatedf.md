@@ -6,7 +6,13 @@
 
 * [R Basics](#basics)
 
+* [Writing Scripts](#writing)
+
 * [Reading in the Dataset](#reading)
+
+* [Writing Loops](#loops)
+
+* [Stratigraphic Ranges](#stratData)
 
 * [Making Your Plot](#makePlot)
 
@@ -158,7 +164,7 @@ text(x=1:25, y=0:24, labels=1:25) # adds labels below the points
 3. Lets say you also have a vector with 4 values called beanHeightsJune that has your bean plant heights from June. How would you go about calculating the June heights as a proportion of their heights today?
 
 
-## <a name="reading"></a>Start of with Good Habits!
+## <a name="writing"></a>Writing Scripts--Start of with Good Habits!
 An absolute necessity for R to be a useful tool, is the construction of scripts. In the context computer languages, a script is a series of commands that can be executed in a program--in our case R. An R script is written and saved as a plain text file. When you are working on a problems set or research project, you should always construct a script. The benefit of a script is that it saves your work. Imagine you are working on a project that requires many steps: read in data, reformat data, run multiple statistical analyses, and finally construct one or more plots. A script keeps all of the relevant commands saved in one document so you can work on it later or come back another time to make modifications. Trust me, you don't want to spend time rewriting commands over and over every time you take a break from coding.
 
 One of the most important aspects of writing a script is being diligent about writing comments. Remember comments are everything on a line that is written after a hashtag (`#`). Comments are a great way to leave notes for yourself and others on what each part of your script does.
@@ -253,18 +259,19 @@ Here is some important terminology. The time that a taxon first appears in the f
 * We want all genera with a *fad_age* that is older than the age_top of *i* 
 * AND a *lad_age* that is younger than the age_bottom of *i*.
 
-Now let’s convert this verbal logic into some R code! Remember, we will want to use the $-notation get data from specific columns.
+Now let’s convert this verbal logic into some R code! Remember, we will want to use the dollar sign-notation to retreive data from specific columns.
 
 ````r
-> sizeData[sizeData $fad_age > timescale$age_top[i] & sizeData $lad_age < timescale$age_bottom[i], ]
+sizeData[sizeData $fad_age > timescale$age_top[i] & sizeData $lad_age < timescale$age_bottom[i], ]
 ````
+
 ![Foote 2000 Figure 1](FooteFig01.png)
 
 Now, convince yourself that this logic will select all genera within a time interval and none of the genera whose ranges are either entirely older or entirely younger than the interval. Refer to the above figure if you need, or draw your own.
 
 ## <a name="makePlot"></a>Making Your Plot
 
-Your version of Figure 1 will be somewhat simplified compared to the published version. You should have the x-axis oriented in the proper direction (i.e., 550 Myr on the left and 0 Myr on the right—after all, we are paleobiologist and not geochemists!). Your x-axis will not have the boxes at the bottom with the geologic periods labeled—I made those with a function that I wrote. I’m happy to share the function, but it is not straightforward to use, so let’s put that off and just have a plain numeric axis. Additionally, in your first attempt at the plot you do not need to include colors for the different phyla. However, once you get your plot made and you have the time and motivations, see if you can figure out how to add the colors. I am not going to just give you the code to make the plots here. I want you to figure it out. To get you started, there are a few questions to ensure you understand the data frame, a list of general steps, and a list of functions that will be useful. You may also find it useful to read the section below titled “Note on Working with Stratigraphic Ranges”.
+Your version of Figure 1 will be somewhat simplified compared to the published version. You should have the x-axis oriented in the proper direction (i.e., 550 Myr on the left and 0 Myr on the right—after all, we are paleobiologist and not geochemists!). Your x-axis will not have the boxes at the bottom with the geologic periods labeled—I made those with a function that I wrote. I’m happy to share the function, but it is not straightforward to use, so let’s put that off and just have a plain numeric axis. Additionally, in your first attempt at the plot you do not need to include colors for the different phyla. However, once you get your plot made and you have the time and motivations, see if you can figure out how to add the colors. I am not going to just give you the code to make the plots here. I want you to figure it out. To get you started, there are a few questions to ensure you understand the data frame, a list of general steps, and a list of functions that will be useful.
 
 #### Some functions you will find useful
 * ``mean()``
