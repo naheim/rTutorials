@@ -32,20 +32,20 @@ Now that you understand the basic data types, let’s look at the types of objec
 **Variables**—Variables store a single value, which can be either a numeric or a character. There are two ways to assign values to variables (and the other data object types). You can either use and equals sign or a left-pointing arrow (<-). Although the equals sign is more familiar, I prefer the arrow. I use the equals sign only for assigning values to parameters within function calls, but you are free to use whichever notation you prefer. Below we assign the value of 7 to a variable called x using both notations. Try it out. After you have assigned a value to your variable, type x to see that it returns the value you assigned.
 
 ````r
-> x <- 7 # arrow notation
-> x = 7 # equals sign notation
+x <- 7 # arrow notation
+x = 7 # equals sign notation
 ````
 
 When copying and pasting code, do not include the prompt symbol (>), this just indicates a new line and will give you an error run in the command line. Working with variables should be intuitive, and you can perform arithmetic on variables with numeric values. Below are some examples of simple mathematical operations using variables.
 
 ````r
-> x <- 2
-> y <- 4
-> x * y # returns a value of 8
-> x / y # returns a value of 0.5
-> x^2 # this is squaring x, returns a value of 4
-> y + 8 # returns a value of 12
-> z <- x * y^3 # assigning z the value of x times the cube of y, 128
+x <- 2
+y <- 4
+x * y # returns a value of 8
+x / y # returns a value of 0.5
+x^2 # this is squaring x, returns a value of 4
+y + 8 # returns a value of 12
+z <- x * y^3 # assigning z the value of x times the cube of y, 128
 ````
 
 Note the use of the comment character (#) above. Every thing on a single line (before you hit return) that appears after the # is not run by R. This is very useful for annotating you code so that you can quickly and easily remember what your code does, even after you haven’t looked at if for a long period of time. USE COMMENTS. It is also worth noting that R follows the order of operations—this is very important so review them if you have forgotten them.
@@ -53,17 +53,17 @@ Note the use of the comment character (#) above. Every thing on a single line (b
 This is a good point to show some examples of the data types, by assigning different types to a variable. The examples above are all of numeric types, but here are some examples to try with character and logical data types. 
 
 ````r
-> x <- "b" # this is a character variable
-> x <- "this is also a Character 56?*_wow"
+x <- "b" # this is a character variable
+x <- "this is also a Character 56?*_wow"
 ````
 Note that if you leave out the quotes, R will think b is a variable and you will get an error—unless you already have a data object called b, then R will assign x the value of b.
 
 ````r
-> y <- TRUE # this is a logical with the value true
-> y <- T # this is also a logical with the value true
+y <- TRUE # this is a logical with the value true
+y <- T # this is also a logical with the value true
 
-> z <- FALSE # this is a logical with the value false
-> z <- F # this is also a logical with the value false
+z <- FALSE # this is a logical with the value false
+z <- F # this is also a logical with the value false
 ````
 
 Note that for logicals, you must use all caps and no quotes.
@@ -71,75 +71,75 @@ Note that for logicals, you must use all caps and no quotes.
 **Vectors**—Vectors are a series of values, all of the same type (i.e., numeric, character, logical) all stored in the same object. In other programming languages they are often called one-dimensional arrays or more simply arrays. If a vector is filled with numeric values, you can perform mathematical operations on it.
 
 ````r
-> x <- 3:9 # creates a vector with all the integers from 2 to 9, inclusive
-> x * 2 # multiplies every value in x by 2
+x <- 3:9 # creates a vector with all the integers from 2 to 9, inclusive
+x * 2 # multiplies every value in x by 2
 ````
 
 In addition to performing arithmetic on a vector, we can also extract a certain subset of values using the square bracket notation ([]). For example, use the following to extract the 3rd value of x.
 
 ````r
-> x[3] # returns the 3rd value of x, which is a 5
+x[3] # returns the 3rd value of x, which is a 5
 ````
 
 **Matrices & Data Frames**—Matrices and data frames are both essentially tables. The main difference between a matrix and a data frame is that all the values of a matrix must be numeric while a data frame can have mixed data types. For this exercise, we will only be using data frames, so we will focus on them. You can think of a data frame as spreadsheet with rows and columns. And like in an Excel spreadsheet, you can give your rows and columns names. Column names are particularly helpful. Below we make a sample data frame and perform some basic operations for extracting specific subsets of data.
 
 ````r
-> # these lines make the data frame, called ‘d’
-> L3 <- LETTERS[1:3]
-> fac <- sample(L3, 10, replace = TRUE)
-> d <- data.frame(x = 1, y = 1:10, fac = fac)
+# these lines make the data frame, called ‘d’
+L3 <- LETTERS[1:3]
+fac <- sample(L3, 10, replace = TRUE)
+d <- data.frame(x = 1, y = 1:10, fac = fac)
 ````
 
 The first thing you might want to do with this data frame is get some basic stats on it, like the number of rows and columns. To do this you can use the dim() function or run the nrow() and ncol() functions separately.
 
 ````r
-> dim(d) # returns the number of rows followed by the number of columns
-> nrow(d) # returns the number of rows
-> ncol(d) # returns the number of columns
+dim(d) # returns the number of rows followed by the number of columns
+nrow(d) # returns the number of rows
+ncol(d) # returns the number of columns
 ````
 
 Now that we know that d is a 10 x 3 data frame, we may want to extract subsets. The most basic subset would be to get the value of a single cell, let’s say the cell located at the 4th row, 2nd column. To get this cell we want to subset d using the square bracket notation. The square bracket notation with data frames (and matrices) is slightly different from how we used it with vectors. Because a data frame has rows and columns (i.e., it is two-dimensional), we need to supply two integers inside the square brackets separated by a comma. The number before the comma always specifies the row number and the comma after the comma always specifies the column number.
 
 ````r
-> d[4,2] # returns the value from the 4th row, 2nd column
-> d[2,4] # returns the value from the 2nd row, 4th column, which in this 
-> example is NULL because there are only 3 columns
+d[4,2] # returns the value from the 4th row, 2nd column
+d[2,4] # returns the value from the 2nd row, 4th column, which in this 
+example is NULL because there are only 3 columns
 ````
 
 To extract a single column of data from a data frame, use the dollar sign notation as follows: [data frame name]$[column name].
 
 ````r
-> d$x # returns the column named x as a vector
+d$x # returns the column named x as a vector
 ````
 
 Extracting whole columns is easy; extracting rows is a bit more complicated. To extract rows we want to use the ``$`` notation within square brackets. Again, remember inside the square brackets we will specify the rows before the comma and the columns after the comma. In this first example, we will get all the columns so we do not need to specify anything after the comma—but we must include the comma.
 
 ````r
-> d[d$fac == 'B',] # returns only the rows of d with a value of ‘B’ in the fac column
+d[d$fac == 'B',] # returns only the rows of d with a value of ‘B’ in the fac column
 ````
 
 Let’s deconstruct what we did here. The first term inside the square brackets is ``d$fac == 'B'``. What this means is to return all the rows where the value of the column named fac is equal to ’B’. If you have never learned a programming language, you may be asking why there are two quals signs. This is how we ask the question “is a variable equal to some value”. In this case we are asking if the values in the fac column are equal to ’B’. If we only included one equals sign, R would think we were trying to set the values of the fac column to ’B’. Since doing this inside square brackets doesn’t make sense, R returns an error. Try it out. There is nothing the the right of the comma because we want to get all the columns. If we only wanted the y and fac columns, we would use the following.
 
 ````r
-> d[d$fac == 'B', 2:3] # returns 2nd and 3rd columns from the rows of d with a value of 'B' in the fac column
+d[d$fac == 'B', 2:3] # returns 2nd and 3rd columns from the rows of d with a value of 'B' in the fac column
 Simple Cross Plots—Making a simply x-y plot in R is easy. Here is a simple example where we plot two vectors of random numbers.
 
-> myX <- rnorm(100) # a vector of 100 random numbers drawn from a normal distribution
-> myY <- rnorm(100) # another vector of 100 random numbers
-> plot(myX, myY) # generates a simple cross plot
+myX <- rnorm(100) # a vector of 100 random numbers drawn from a normal distribution
+myY <- rnorm(100) # another vector of 100 random numbers
+plot(myX, myY) # generates a simple cross plot
 ````
 
 Note the default behavior of the plot() function. The x- and y-axis labels are simply the variable names. The points are black open circles. These can all be customized. The axis labels are set with the xlab and ylab parameters and the point style and color are set with pch (point character) and col, respectively.
 
 ````r
-> plot(myX, myY, xlab="My x values", ylab="My y values", pch=16, col="blue") # generates a customized cross plot
+plot(myX, myY, xlab="My x values", ylab="My y values", pch=16, col="blue") # generates a customized cross plot
 ````
 
 My preferred plotting symbol is a solid circle: pch=16. However, there are 25 point characters you can choose from. Some point characters have a fill color, set with the bg parameter. Run the following code to see them all with the point outlines in blue and fills in red.
 
 ````r
-> plot(1:25, col="blue", bg="red", pch=1:25, cex=2, ylim=c(0,25))
-> text(x=1:25, y=0:24, labels=1:25) # adds labels below the points
+plot(1:25, col="blue", bg="red", pch=1:25, cex=2, ylim=c(0,25))
+text(x=1:25, y=0:24, labels=1:25) # adds labels below the points
 ````
 
 ### Variable questions:
@@ -167,23 +167,23 @@ Now that you understand the basic data and object types along with some basic ma
 Once you have downloaded the file, save it to the working directory you will be using for this exercise. Open R and set the working directory to the one you are using for the exercise. You can set the working director in two ways. The first uses the keyboard shortcut cmmd-D (may be different in Windows), which will open a Finder window and you can navigate to your desired directory. The second method uses the setwd() function (see the section on functions in the Holland tutorial). In Mac and Windows, respectively, your command will look something similar to the following: 
 
 ````r
-> setwd("/path/to/my/directory") # Mac
-> setwd("c:/path/to/my/directory/") # Windows.
+setwd("/path/to/my/directory") # Mac
+setwd("c:/path/to/my/directory/") # Windows.
 ````
 
 Once you set the working directory, you are ready to read in the file. To read in the file we are going to use the read.delim() function. This function reads in a tab-delimited file and stores it in your current R session as a data frame, if you assign it to a data object. So far in the examples, we have used simple single letter names for data objects (e.g., x, d). These names are not very informative, so I encourage you to give your data objects meaningful names. There are a couple of hare rules for data object names that you must follow. 1) never start an object name with a number: data3 is okay, 3data is not. 2) Do not include any spaces in the object name. 3) The only two special characters you can include are the period (.) and underscore (\_): ``my.data`` and ``my_data`` are good names, ``my/Data`` is not. Using multiple word object names is a fine practice and there are several ways you can do this. I suggest picking one and sticking with it throughout your code. The first is using what id called 'cammel case', in which the first word is lower case and the first letter of all other words is upper case with no spaces, e.g., ``myNewData``. The second is using underscores as in ``my_new_data``. Finally you can use periods, which is as far as I can tell uniquely allowed by R, as in ``my.new.data. Again``, pick one format and stick with it. Some computer programmers have strong opinions about which format to use, but it is really a personal choice. Let’s read in the data file, which I will store in a data frame called sizeData.
 
 ````r
-> sizeData <- read.delim(file='supplementary_data_file.txt')
-> # Alternatively you can read the file in directly from the web
-> sizeData <- read.delim(file='https://stacks.stanford.edu/file/druid:rf761bx8302/supplementary_data_file.txt')
+sizeData <- read.delim(file='supplementary_data_file.txt')
+# Alternatively you can read the file in directly from the web
+sizeData <- read.delim(file='https://stacks.stanford.edu/file/druid:rf761bx8302/supplementary_data_file.txt')
 ````
 
 The first thing I always do after reading in a new dataset, is take a look at it to make sure it looks like it should. 
 
 ````r
-> dim(sizeData) # there are 17208 rows and 14 columns
-> head(sizeData)
+dim(sizeData) # there are 17208 rows and 14 columns
+head(sizeData)
 ````
 
 You have already seen ``dim()``, but ``head()`` is also very useful. Because sizeData has more than 17,000 rows, if you were to just type sizeData, R would try to show you all 17,000+ rows. The head() function returns the first 6 rows only. This gives you a chance to make sure the column names were read in correctly and that the values of each column appear to be in the correct format. Take a few minutes to make sure you understand what the columns in the data frame are and how you might use them in constructing your plot.
@@ -191,10 +191,10 @@ You have already seen ``dim()``, but ``head()`` is also very useful. Because siz
 You also need to read in a second tab-delimited file called *timescale.txt*. The file can be downloaded directly from GitHub: [https://raw.githubusercontent.com/naheim/rTutorials/master/dataFiles/timescale.txt](https://raw.githubusercontent.com/naheim/rTutorials/master/dataFiles/timescale.txt). Once you have read the file into R, use head to examine the types of information included in the data frame. Make sure you understand each column in the data frame.
 
 ````r
-> timescale <- read.delim(file='timescale.txt')
-> head(timescale)
-> # Alternatively you can read the file in directly from the web
-> timescale <- read.delim(file='https://raw.githubusercontent.com/naheim/paleosizePaper/master/rawDataFiles/timescale.txt')
+timescale <- read.delim(file='timescale.txt')
+head(timescale)
+# Alternatively you can read the file in directly from the web
+timescale <- read.delim(file='https://raw.githubusercontent.com/naheim/paleosizePaper/master/rawDataFiles/timescale.txt')
 ````
 
 ## <a name="makePlot"></a>Making Your Plot
@@ -312,7 +312,7 @@ classes
 The built-in help function. To get help understanding a function, type a question mark followed by the function name.
 
 ````r
-> ?mean # opens the help page for the mean() function
+?mean # opens the help page for the mean() function
 ````
 The R Website. [http://r-project.org](http://r-project.org).
 
