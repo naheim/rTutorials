@@ -16,10 +16,11 @@ After computing and scaling individual occupancy curves, we can then generate an
 
 Before beginning our analysis, it's important to select the measure of geographic range. In paleobiological studies, there are number of commonly used metrics. Here we will use two to calculate two occupancy curves. The two metrics are maximum great circle distance and the number of occupied tectonic blocks.
 
-**Maximum Great Circle Distance** Great circle distance is the shortest distance between two points on the surface of the sphere. For each genus in each stage, we will fine the maximum great distance between all pairs of occurrences. We will do this using the ``geosphere`` library, which assumes the spehere is the size of the Earth and returns distances in uits of kilometers. We will, of course, use paleocoordinates by adding ``&show=paleoloc`` to the API call. 
+**Maximum Great Circle Distance** Great circle distance is the shortest distance between two points on the surface of the sphere. For each genus in each stage, we will fine the maximum great distance between all pairs of occurrences. We will do this using the ``geosphere`` library, which assumes the sphere is the size of the Earth and returns distances in units of kilometers. We will, of course, use paleocoordinates by adding ``&show=paleoloc`` to the API call. 
 
-**Number of Tectonic Blocks** The Earth's lithosphere is divided into a series of tectonic blocks that move relative to each other over geological time, though some are now sutured to other blocks and move as single larger blocks. The PBDB, 
+**Number of Tectonic Blocks** The Earth's lithosphere is divided into a series of tectonic blocks that move relative to each other over geological time, though some are now sutured to other blocks and move as single larger blocks. The PBDB, returns the tectonic plate for each occurrence.
 
+### Occupancy Code
 
 ```` r
 library(geosphere)
@@ -27,14 +28,57 @@ library(geosphere)
 # get Stenolaemata occurrences from PBDB
 steno <- read.delim("https://paleobiodb.org/data1.2/occs/list.tsv?&base_name=Stenolaemata&idreso=lump_genus&show=class,paleoloc")
 
+# it's important to drop occurrences where the paleolocations are unknown
+steno <- droplevels(subset(steno, !is.na(paleolng)))
+
 # Timescale excluding Pleistocene and Holocene
 timescale <- read.delim("https://paleobiodb.org/data1.2/intervals/list.tsv?scale_level=5&min_ma=2.588")
+nBins <- nrow(timescale)
 
-# generate data frame for genus-level infomation
+# generate data frame for genus-level information
 # FAD, LAD, nPalocont, nOccur 
 
+# this is a simple custom function that will count the number of uniqe values in a vector
+nUnique <- function(x) {return(length(unique(x)))}
+
+# this is a custom function to calculate max great circle distance
+maxGCD <- function(x) {
+	require(geosphere)
+	
+	coords <- unique(x)
+	distances <- apply(x, 1, distGeo, x)
+	upperDist <- distances[lower.tri(distances, diag = FALSE)]
+	
+	return(max(upperDist))
+}
+
+#calc. individual parameters of interst
+genus <- levels(steno$accepted_name)
+fad <- tapply(steno$max_ma, steno$accepted_name, max)
+lad <- tapply(steno$min_ma, steno$accepted_name, min)
+nOccur <- as.numeric(table(steno$accepted_name))
+nPaleocont <- tapply(steno$geoplate, steno$accepted_name, nUnique)
+
+# stitch them all into a single data frame
+genera <- data.frame(genus, fad, lad, nOccur, nPaleocont)
+nGen <- nrow(genera)
+
+# Set up data frames to hold geographic range values for each genus in each Phanerozoic stage
+paleoCont <- data.frame(matrix(NA, nrow=nBins, ncol=nGen, dimnames=list(timescale$interval_name, genera$genus)))
+greatCirc <- paleoCont # can set equal to paleoCont because we haven't filled in any values yet.
+
+
 # calculate geographic range 
-apply(coords, 1, distGeo, coords)
+# the easiest, though not fastest in terms of computational time, is to set up a loop though each time interval, the use apply functions to calculate geographic ranges
+for(i in 1:nBins) {
+	# get occurrences from time interval
+	tempOccur <- steno[steno$max_ma > timescale$min_ma[i] & steno$min_ma < timescale$max_ma[i],]
+	paleoCont[i,] <- tapply(tempOccur$geoplate, tempOccur$accepted_name, nUnique)
+	
+	greatCirc[i,] <- tapply(tempOccur[, match(c('paleolng','paleolat'), colnames(tempOccur))], tempOccur$accepted_name, maxGCD)
+	
+}
+
 
 
 ````
