@@ -16,7 +16,7 @@ After computing and scaling individual occupancy curves, we can then generate an
 
 Before beginning our analysis, it's important to select the measure of geographic range. In paleobiological studies, there are number of commonly used metrics. Here we will use two to calculate two occupancy curves. The two metrics are maximum great circle distance and the number of occupied tectonic blocks.
 
-**Maximum Great Circle Distance** Great circle distance is the shortest distance between two points on the surface of the sphere. For each genus in each stage, we will fine the maximum great distance between all pairs of occurrences. We will do this using the ``geosphere`` library, which assumes the sphere is the size of the Earth and returns distances in units of kilometers. We will, of course, use paleocoordinates by adding ``&show=paleoloc`` to the API call. 
+**Maximum Great Circle Distance** Great circle distance is the shortest distance between two points on the surface of the sphere. For each genus in each stage, we will fine the maximum great distance between all pairs of occurrences. We will do this using the ``geosphere`` library, which assumes the sphere is the size of the Earth and returns distances in units of meters. We will, of course, use paleocoordinates by adding ``&show=paleoloc`` to the API call. 
 
 **Number of Tectonic Blocks** The Earth's lithosphere is divided into a series of tectonic blocks that move relative to each other over geological time, though some are now sutured to other blocks and move as single larger blocks. The PBDB, returns the tectonic plate for each occurrence.
 
@@ -100,11 +100,15 @@ for(i in 1:nBins) {
 
 # remove genera that don't have any geographic ranges
 # some don't have GCD ranges because the don't have any intervals with at least three occurrences
-greatCirc <- greatCirc[, apply(greatCirc, 2, sum, na.rm=T) > 0]
+greatCirc <- greatCirc[, apply(greatCirc, 2, sum, na.rm=T) >= 3]
 
 # convert NAs within stratigraphic ranges to zeros
 paleoCont <- apply(paleoCont, 2, internalNAtoZero) # apply function to columns
 greatCirc <- apply(greatCirc, 2, internalNAtoZero) # apply function to columns
+
+# drop columns with no variation in geographic range
+paleoCont <- paleoCont[,apply(paleoCont,2,sd,na.rm=TRUE) > 0 & !is.na(apply(paleoCont,2,sd,na.rm=TRUE))]
+greatCirc <- greatCirc[,apply(greatCirc,2,sd,na.rm=TRUE) > 0 & !is.na(apply(greatCirc,2,sd,na.rm=TRUE))]
 
 ````
 
@@ -113,11 +117,74 @@ Now that we have out geographic ranges calculated two ways, we want to scale the
 Once our new data frames are set up, we will loop through each genus, and scale the stratigraphic ranges to unit value (length of 1) and to the maximum occupancy (every occupancy is a proportion of the maximum).
 
 ````r
+# custom function for determining the relative position of a geological stage within a stratigraphic range
+relTime <- function(x, timescale) {
+	which(timescale$max_ma >= x & timescale$min_ma < x)
+}
+
 # set up two new data frames.
 scaledPaleoCont <- matrix(NA, nrow=100, ncol=ncol(paleoCont), dimnames=list(1:100, colnames(paleoCont)))
 scaledGCD <- matrix(NA, nrow=100, ncol=ncol(greatCirc), dimnames=list(1:100, colnames(greatCirc)))
 
-for(i in 1:ncol(scaledPaleoCont)) {
+for(i in 1:ncol(paleoCont)) {
 	
+	tempRange <- which(!is.na(paleoCont[,i])) # get index values of non-na values--the stratigraphic range
+	fadIndex <- max(tempRange) # find the index of the last non-NA
+	ladIndex <- min(tempRange) # find the index of the first non-NA
+	
+	fadAge <- timescale$max_ma[fadIndex]
+	ladAge <- timescale$min_ma[ladIndex]
+	
+	rangeInts <- seq(fadAge, ladAge, length.out=101)[-101] # 0 - 0.99 (eliminating 1.00, which is the interval after the LAD
+	timeScaled <- paleoCont[sapply(rangeInts, relTime, timescale=timescale), i]
+	
+	maxScaled <- timeScaled/max(timeScaled)
+	
+	scaledPaleoCont[,i] <- maxScaled
+	
+	## repeat for GCD, but need if statement because there are fewer columns/genera
+	if(i <= ncol(scaledGCD)) {
+		tempRange <- which(!is.na(greatCirc[,i])) # get index values of non-na values--the stratigraphic range
+		fadIndex <- max(tempRange) # find the index of the last non-NA
+		ladIndex <- min(tempRange) # find the index of the first non-NA
+		
+		fadAge <- timescale$max_ma[fadIndex]
+		ladAge <- timescale$min_ma[ladIndex]
+		
+		rangeInts <- seq(fadAge, ladAge, length.out=101)[-101] # 0 - 0.99 (eliminating 1.00, which is the interval after the LAD
+		timeScaled <- greatCirc[sapply(rangeInts, relTime, timescale=timescale), i]
+		
+		maxScaled <- timeScaled/max(timeScaled)
+		
+		scaledGCD[,i] <- maxScaled
+	}
 }
+````
+
+Now that we have two matrices with our scaled geographic ranges, we can plot a few genera, the calculate and plot the mean occupancy for each measure of geographic range.
+
+````r 
+quartz(height=12, width=16)
+par(mfrow=c(3,5), las=1)
+randGenera <- sample(intersect(colnames(scaledPaleoCont), colnames(scaledGCD)), 15)
+for(i in 1:length(randGenera)) {
+	plot(1:100, scaledGCD[,colnames(scaledGCD)==randGenera[i]], type="l", lwd=2, xlab="Scaled time", ylab="Occupancy (scaled to max)", main= randGenera[i], ylim=c(0,1)) # great circle occupancy 
+	lines(1:100, scaledPaleoCont[,colnames(scaledPaleoCont)==randGenera[i]], type="l", lwd=2, lty=2) # tectonic plate occupancy
+	if(i == 1) {
+		legend("topleft", legend=c('GCD','Paleo. Continent'), lty=1:2, lwd=2, bty="n")
+	}
+}
+
+
+## now let's calculate the average occupancy using apply()
+meanPaleoCont <- apply(scaledPaleoCont, 1, mean)
+meanGCD <- apply(scaledGCD, 1, mean)
+
+quartz()
+par(las=1)
+plot(1:100, meanGCD, type="l", lwd=2, xlab="Scaled time", ylab="Average occupancy (scaled to max)", ylim=c(0,1)) # great circle occupancy 
+lines(1:100, meanPaleoCont, type="l", lwd=2, lty=2) # tectonic plate occupancy
+legend("topleft", legend=c('GCD','Paleo. Continent'), lty=1:2, lwd=2, bty="n")
+
+
 ````
