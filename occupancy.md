@@ -52,7 +52,20 @@ maxGCD <- function(x) {
 	return(max(upperDist))
 }
 
-#calc. individual parameters of interst
+# this is a custom function to identify NA values that are between non-NA values and set them equal to zero.
+# this is needed to properly time scale the geographic occupancy
+internalNAtoZero <- function(x) {
+	NonNAindex <- which(!is.na(x)) # get non-na values
+	firstNonNA <- min(NonNAindex) # find the index of the first non-NA
+	lastNonNA <- max(NonNAindex) # find the index of the last non-NA
+	
+	tempRange <- x[firstNonNA:lastNonNA] # get full range, including NAs
+	tempRange[is.na(tempRange)] <- 0 # change NAs within range to 0
+	x[firstNonNA:lastNonNA] <- tempRange # reset values in original vector
+	return(x)
+}
+
+#calc. individual parameters of interest
 genus <- levels(steno$accepted_name)
 fad <- tapply(steno$max_ma, steno$accepted_name, max)
 lad <- tapply(steno$min_ma, steno$accepted_name, min)
@@ -73,12 +86,38 @@ greatCirc <- paleoCont # can set equal to paleoCont because we haven't filled in
 for(i in 1:nBins) {
 	# get occurrences from time interval
 	tempOccur <- steno[steno$max_ma > timescale$min_ma[i] & steno$min_ma < timescale$max_ma[i],]
+	
+	#tabulate the number of unique paleocontinents for each genus
 	paleoCont[i,] <- tapply(tempOccur$geoplate, tempOccur$accepted_name, nUnique)
 	
-	greatCirc[i,] <- tapply(tempOccur[, match(c('paleolng','paleolat'), colnames(tempOccur))], tempOccur$accepted_name, maxGCD)
+	#tabulate the great circle distance for each
+	#but first drop all genera that don't have at least three occurrences
+	temp <- table(tempOccur$accepted_name)
+	tempOccur <- tempOccur[is.element(tempOccur$accepted_name, names(temp[temp>=3])),] 
+	greatCirc[i,] <- as.numeric(by(tempOccur[, match(c('paleolng','paleolat'), colnames(tempOccur))], tempOccur$accepted_name, maxGCD))
 	
 }
 
+# remove genera that don't have any geographic ranges
+# some don't have GCD ranges because the don't have any intervals with at least three occurrences
+greatCirc <- greatCirc[, apply(greatCirc, 2, sum, na.rm=T) > 0]
 
+# convert NAs within stratigraphic ranges to zeros
+paleoCont <- apply(paleoCont, 2, internalNAtoZero) # apply function to columns
+greatCirc <- apply(greatCirc, 2, internalNAtoZero) # apply function to columns
 
+````
+
+Now that we have out geographic ranges calculated two ways, we want to scale them in time and to the max occupancy. To do this we will set up two new Data frames. This time each will have 100 rows-each a cumulative percentage of the geographic range, and the number of columns will correspond to the number of genera. Each value in the data frames will range from 0 to 1, to represent a proportion of the maximum occupancy for each genus.
+
+Once our new data frames are set up, we will loop through each genus, and scale the stratigraphic ranges to unit value (length of 1) and to the maximum occupancy (every occupancy is a proportion of the maximum).
+
+```` R
+# set up two new data frames.
+scaledPaleoCont <- matrix(NA, nrow=100, ncol=ncol(paleoCont), dimnames=list(1:100, colnames(paleoCont)))
+scaledGCD <- matrix(NA, nrow=100, ncol=ncol(greatCirc), dimnames=list(1:100, colnames(greatCirc)))
+
+for(i in 1:col(scaledPaleoCont)) {
+	
+}
 ````
