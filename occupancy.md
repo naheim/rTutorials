@@ -112,12 +112,12 @@ Now that we have out geographic ranges calculated two ways, we want to scale the
 
 Once our new data frames are set up, we will loop through each genus, and scale the stratigraphic ranges to unit value (length of 1) and to the maximum occupancy (every occupancy is a proportion of the maximum).
 
-```` R
+````r
 # set up two new data frames.
 scaledPaleoCont <- matrix(NA, nrow=100, ncol=ncol(paleoCont), dimnames=list(1:100, colnames(paleoCont)))
 scaledGCD <- matrix(NA, nrow=100, ncol=ncol(greatCirc), dimnames=list(1:100, colnames(greatCirc)))
 
-for(i in 1:col(scaledPaleoCont)) {
+for(i in 1:ncol(scaledPaleoCont)) {
 	
 }
 ````
