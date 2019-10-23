@@ -30,12 +30,20 @@ Work in pairs. You have been provided with two decks of cards. One is a regular 
 3. Why is the third curve you constructed different. 
 4. Do you need more or fewer specimens to adequately sample diversity of the altered deck than for the standard deck?
 
+## Analytical Rarefaction
+Rarefaction is based on the idea of collector's curves. But rather than plotting the actual number of specimens and species found, the rarefaction curve uses the known number of specimens of each species to calculate the expected number of species given a certain sample size. In essence, a rarefaction curve is the mean collector's curve if you were to generate many, many collector's curves from the same sample (above you generated two curves for the same sample).
+
+One of the purposes of a rarefaction curve is to compare the diversity of two or more sample that have different numbers of specimens. 
 
 ```` r
 library(vegan) # package developed by plant ecologists
 
 # get all Carboniferous brachiopods with abundance counts
-ozarks <- read.delim(file="https://paleobiodb.org/data1.2/occs/list.tsv?base_name=Brachiopoda&interval=Carboniferous&show=loc,class,abund&abundance=count")
+ozarks <- read.delim(file="https://paleobiodb.org/data1.2/occs/list.tsv?base_name=Brachiopoda&interval=Carboniferous&cc=US&state=Arkansas,Oklahoma&show=loc,class,abund&abundance=count")
+
+
+#cinci <- read.delim(file="https://paleobiodb.org/data1.2/occs/list.tsv?base_name=Metazoa&interval=Ordovician&cc=US&state=Ohio,Kentucky,Indiana&show=loc,class,abund&abundance=count")
+#cinci <- droplevels(subset(cinci, reference_no == 24429)
 
 # limit to only those from Heim (2009), which are from the Ozarks (reference_id = 26838)
 # separate into two data frame, one for the Chesterian (latest Mississippian) and one for the Morrowan (earliest Pennsylvanian)
@@ -46,9 +54,58 @@ morrow <- droplevels(subset(ozarks, early_interval == 'Morrowan' & reference_no 
 chesterComm <- as.data.frame.matrix(table(chester$collection_no, chester$accepted_name))
 morrowComm <- as.data.frame.matrix(table(morrow$collection_no, morrow$accepted_name))
 
+# since we want to compare the two stages, collapse each data frame into a vector of species counts using colSums()
+chesterCounts <- colSums(chesterComm)
+morrowCounts <- colSums(morrowComm)
 
 ````
 
 #### Exercise Questions 2
- 1. How many genera are there in the Chesterian community matrix? How many in the Morrowan?
- 2. How many collections/samples are there in the Chesterian community matrix? How many in the Morrowan?
+ 1. How many genera are there in the Chesterian? How many in the Morrowan?
+ 2. How many specimens are there in the Chesterian? How many in the Morrowan?
+
+
+### Make rarefaction curves.
+
+You're going to make a rarefaction curve for each stage and plot them, with standard errors, on the same plot. You will use the ``rarefy()`` function in the *vegan* package. The rarefy function takes a vector of species counts (e.g., chesterCounts) as well as your desired sample size. Given these two parameters, it will return the expected number of species at that sample size. The strategy is that for each period we will calculate the expected number of species for all possible sample sizes, then plot each curve of expected values along with envelopes showing two standard errors.
+
+```` r
+# Rarefy Chesterian
+nChester <- sum(chesterCounts) #first let's count the number of Chesterian specimens
+# use the rarefy function.
+# parameter 1: the vector of species counts
+# parameter 2: the sample sizes you want species richness estimates for
+# parameter 3: let the function know you want the standard error returned.
+chesterRare <- rarefy(chesterCounts, 1:nChester, se=TRUE) 
+
+# rarefy the Morrowan data
+nMorrow <- sum(morrowCounts)
+morrowRare <- rarefy(morrowCounts, 1:nMorrow, se=TRUE)
+
+# Plot our rarefaction curves
+# start with an empty plot window
+plot(1:10, type="n", xlab="Number of specimens", ylab="Number of genera", xlim=c(1, max(nChester, nMorrow)), ylim=c(1, max(length(chesterCounts), length(morrowCounts))), las=1) 
+
+# plot Chesterian, starting with 2xSE using the polygon fucntion
+xpoly <- c(1:nChester, nChester:1)
+ypoly <- c(chesterRare[1,]-2*chesterRare[2,], rev(chesterRare[1,]+2*chesterRare[2,]))
+polygon(xpoly, ypoly, col=rgb(1,0,0,0.2))
+# now the actual estimates
+lines(1:nChester, chesterRare[1,], col='red', lwd=2)
+
+# Repeat for Morrowan
+xpoly <- c(1: nMorrow, nMorrow:1)
+ypoly <- c(morrowRare[1,]-2* morrowRare[2,], rev(morrowRare[1,]+2* morrowRare[2,]))
+polygon(xpoly, ypoly, col=rgb(0,0,1,0.2))
+# now the actual estimates
+lines(1:nMorrow, morrowRare[1,], col='blue', lwd=2)
+
+# add a legend
+legend("topleft", legend=c('Chesterian','Morrowan'), col=c('red','blue'), lwd=2, bty='n', cex=1.25)
+````
+
+#### Exercise Questions 3
+
+1. Overall, which stage is more diverse?
+2. How many genera would each stage have if you sampled 50 specimens from each?
+3. How many genera would each stage have if you sampled 100 specimens from each?
