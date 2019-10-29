@@ -1,10 +1,3 @@
-# Spindle Diagrams of Diversity Over Time
-Here is a function that takes a time series of richness values for a set of taxa, and plots them as spindle diagrams. 
-
-### The Function
-You can load the function directly from GitHub ([fxn goes here]()) or you can paste it into your code from below.
-
-```` r 
 spindle.diagram <- function(diversity, timescale, boundaries=NA, yLabShift=1.00, file.name="spindle.pdf", label.cex=0.5) {
 	#convert 0 to NA
 	diversity[diversity == 0] <- NA
@@ -65,36 +58,4 @@ spindle.diagram <- function(diversity, timescale, boundaries=NA, yLabShift=1.00,
 	}
 	dev.off()
 }
-````
-
-
-### Here's an example of it's use with a bryozoan download from the PBDB.
-This example will save a pdf to your working directory
-
-```` r
-# load the function
-source()
-
-x <- read.delim(file="https://paleobiodb.org/data1.2/occs/list.tsv?base_name=Stenolaemata&idreso=lump_genus&show=paleoloc,class")
-x$family[x$family==''] <- 'NO_FAMILY_SPECIFIED'
-x <- droplevels(x)
-tsMin <- min(x$min_ma)
-tsMax <- max(x$max_ma)
-timescale <- read.delim(file=paste("https://paleobiodb.org/data1.2/intervals/list.tsv?scale_level=5&min_ma=",tsMin,"&max_ma=",tsMax, sep=""))
-nBins <- nrow(timescale)
-
-fad <- tapply(x$max_ma, x$accepted_name, max)
-lad <- tapply(x$min_ma, x$accepted_name, min)
-genera <- data.frame('genus'=names(fad), fam=factor(tapply(x$family, x$accepted_name, function(x){return(as.character(x[1]))})), fad, lad)
-
-fam <- levels(x$family)
-diversity <- data.frame(matrix(NA, nrow=nBins, ncol=length(fam), dimnames=list(timescale$interval_name, fam)))
-
-for(i in 1:nBins) {
-	temp <- genera[genera$fad > timescale$min_ma[i] & genera$lad < timescale$max_ma[i],]
-	diversity[i,] <- as.numeric(table(temp$fam))
-}
-
-spindle.diagram(diversity, timescale, boundaries=c(252.17, 66))
-````
 
