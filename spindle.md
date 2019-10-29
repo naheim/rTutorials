@@ -73,6 +73,9 @@ This example will save a pdf to your working directory
 
 ```` r
 # load the function
+
+# SET YOUR WORKING DIRECTORY
+
 source("https://raw.githubusercontent.com/naheim/rTutorials/master/scripts/spindleFxn.r")
 
 x <- read.delim(file="https://paleobiodb.org/data1.2/occs/list.tsv?base_name=Stenolaemata&idreso=lump_genus&show=paleoloc,class")
