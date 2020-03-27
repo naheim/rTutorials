@@ -6,3 +6,4 @@ This is minaly intedented for undergraduate researchers working with me, but nee
 * [Making simple maps](mapRanges.md)
 * [Calculating fossil occupancy](occupancy.md)
 * [Making spindle diagrams](spindle.md)
+* [Calculating and plotting mean body size with 95% confidence intervals](mean_ci.md)
