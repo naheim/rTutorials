@@ -12,15 +12,41 @@ This tutorial assums you understand what loops are and how to construct them to 
 ```` r
 # Read in Heim et al. 2015 body size data from the web
 sizeData <- read.delim(file='https://stacks.stanford.edu/file/druid:rf761bx8302/supplementary_data_file.txt')
+head(sizeData) # it's always a good idea to look at you data to make sure it looks like you expect and to learn the relevant column names for analyses.
 
 # Read in the timescale file
 timescale <- read.delim(file='https://raw.githubusercontent.com/naheim/paleosizePaper/master/rawDataFiles/timescale.txt')
 nBins <- nrow(timescale) # this is the number if time intervals and I find it convenient to calculate in here and use rBins rather than writing out nrow(timescale) everytime I need it.
 
 ````
-### Set up variables
+### Set up variables & calculate values
 Once you've read in your data files, you want to set up variables to store the results of your calculations. The thre are three quantities you want to keep track of: the number of genera, mean size of genera, and the standard deviation of size. You will want to calculate these variables in each 99 time inervals of ``timescale``. 
 
 ```` r
+nGenera <- vector(mode="numeric", length=nBins) # a numeric vector to hold the number of genera extant in each time interval
+meanGenera <- nGenera # same as above, note that because we haven't added any values, I can just copy the previously created vector--saves typing
+sdGenera <- nGenera # a vector for standard deviation
 
+# loop through each time interval to calculate important properties
+for(i in 1:nBins) {
+	#get extant taxa
+	tempTaxa <- subset(sizeData, fad_age > timescale$age_top[i] & lad_age < timescale$age_bottom[i])
+	
+	# calculate quantities for extant taxa
+	nGenera[i] <- nrow(tempTaxa)
+	meanGenera[i] <- mean(tempTaxa$log10_volume)
+	sdGenera[i] <- sd(tempTaxa$log10_volume)
+	
+}
+
+````
+
+### calculate confidence intervals & plot 
+
+```` r
+ci <- 1.96*sdGenera/(sqrt(nGenera-1))
+
+plot(timescale$age_mid, meanGenera, type="o", pch=16, xlim=c(541, 0), ylim=range(c(meanGenera+ci, meanGenera-ci)))
+
+segments(timescale$age_mid, meanGenera-ci, timescale$age_mid, meanGenera+ci)
 ````
