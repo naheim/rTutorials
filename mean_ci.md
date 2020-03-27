@@ -46,7 +46,9 @@ for(i in 1:nBins) {
 ```` r
 ci <- 1.96*sdGenera/(sqrt(nGenera-1))
 
-plot(timescale$age_mid, meanGenera, type="o", pch=16, xlim=c(541, 0), ylim=range(c(meanGenera+ci, meanGenera-ci)))
+par(las=1, pch=16, mar=c(5, 4.25, 4, 2) + 0.1) # set some plot parameters
+
+plot(timescale$age_mid, meanGenera, type="o", xlim=c(541, 0), ylim=range(c(meanGenera+ci, meanGenera-ci)), xlab="Geological time (Ma)", ylab=expression(paste("Mean biovolume (log"[10]," mm"^3,")")))
 
 segments(timescale$age_mid, meanGenera-ci, timescale$age_mid, meanGenera+ci)
 ````
