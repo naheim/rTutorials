@@ -7,3 +7,4 @@ This is minaly intedented for undergraduate researchers working with me, but nee
 * [Calculating fossil occupancy](occupancy.md)
 * [Making spindle diagrams](spindle.md)
 * [Calculating and plotting mean body size with 95% confidence intervals](mean_ci.md)
+* [Extinction selectivity](selectivity.md) 
