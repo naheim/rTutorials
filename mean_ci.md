@@ -42,13 +42,25 @@ for(i in 1:nBins) {
 ````
 
 ### calculate confidence intervals & plot 
+In the above code we calculated the mean body size of fossil sampled from the fossil record. The key point here is that we have have sampled the fossil record--we have not measured every single fossil spcies, which in statistical terms is often called the population. So, Our assumption is that the sample can inform us about the mean size of fossil species in the total population. We could just assume that the sample mean is identical to the population mean, but that is unlikely. However, if we make a few assumptions about the distribution of body sizes in the population and that our sample is random, we can calculate a range of mean sizes that is likely to contain the population mean and we can assign a probability for how likely the population mean is to actually fall within that range.  This is the confidence interval. 
+
+By convention, scientists typically calculate 95% confidence intervals, which means that we are 95% confident that the population mean lies within the defined range. If we assume that the population of body sizes is normally distributed, which is reasonable when sizes are log-transformed, then we can calculate the confidence interval as:<br/>
+<br/>c.i. = x&#772; &plusmn; t<sup>&lowast;</sup> &#215; &sigma;<sub>x&#772;</sub>, 
+
+where x&#772; is the sample mean, t<sup>&lowast;</sup> is the critical value of a t-distribution, and &sigma;<sub>x&#772;</sub> is the standard error of the sample. For a 95% confidence interval, t<sup>&lowast;</sup> = 1.96. &sigma;<sub>x&#772;</sub> = &sigma;/&radic;N, where &sigma; is the sample standard deviation and N is the sample size.
+
+[Here](http://onlinestatbook.com/2/estimation/mean.html) is a more detailed explanation of how to calculate a confidence interval.
 
 ```` r
-ci <- 1.96*sdGenera/(sqrt(nGenera-1))
+# calculate the conficence interval
+ci <- 1.96*sdGenera/(sqrt(nGenera))
 
+# finally let's make a plot
 par(las=1, pch=16, mar=c(5, 4.25, 4, 2) + 0.1) # set some plot parameters
 
+# plot the mean values, note that I set the y-limits using the total range of the confidence intervals so everyting will show up in the plot frame
 plot(timescale$age_mid, meanGenera, type="o", xlim=c(541, 0), ylim=range(c(meanGenera+ci, meanGenera-ci)), xlab="Geological time (Ma)", ylab=expression(paste("Mean biovolume (log"[10]," mm"^3,")")))
 
+# add the confidence intervals using the segments() function.
 segments(timescale$age_mid, meanGenera-ci, timescale$age_mid, meanGenera+ci)
 ````
