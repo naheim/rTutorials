@@ -121,13 +121,13 @@ Odds ratio might best be illustrated by returning to searching for condors at Pi
 
 so here we want to use the logic of how *lad_age* is situated realtive to the time interval of interest to construct a new binary response variable called ``extinct``. Will set the value for extinct equal to 1 for genera that go extinct and equal to 0 for those genra that survive.
 
-Load the paleosize data file that is in ``paleosizePaper/rawDataFiles`` directory and we'll perform a logistic regression of how well body size predicts going extinct at the end of the Cretaceous period. 
+Load the data files the body sizes and the timescale (these are slightly different from the ones used above) and we'll perform a logistic regression of how well body size predicts going extinct at the end of the Cretaceous period. 
 
 1) Read in data.
 
 ````r
 # read in size and timescale data files
-sizeData <- read.delim(file='https://stacks.stanford.edu/file/druid:rf761bx8302/supplementary_data_file.txt')
+sizeData <- read.delim(file='https://raw.githubusercontent.com/naheim/paleosizePaper/master/rawDataFiles/bodySizes.txt')
 timescale <- read.delim(file='https://raw.githubusercontent.com/naheim/paleosizePaper/master/rawDataFiles/timescale.txt')
 ````
 
