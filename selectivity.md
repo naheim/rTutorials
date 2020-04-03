@@ -56,7 +56,7 @@ for(i in 1:nBins) {
 }
 ````
 
-### plot the data to see how much selectivity there was
+### Plot the data to see selectivity over time
 The plot that we're going to make will have geological time on the x-axis and the mean differnce between victims and survivors (V - S) on the y-axis. There will be a dashed horzontal line at y = 0 to indicate no selectivity. Each point will the be average difference between victims and survivors with 95% confidence intervals. In general, we would say that if the confidence crosses the 0-line, that there was not significant selectivity during that interval. If a point and its confidence interval are above the 0-line, then we sould say that victims were significantly larger than survivors. If a point and its confidence interval are below the 0-line, then we sould say that victims were significantly smaller than survivors. 
 
 ```` r
