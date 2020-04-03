@@ -129,6 +129,7 @@ Load the data files the body sizes and the timescale (these are slightly differe
 # read in size and timescale data files
 sizeData <- read.delim(file='https://raw.githubusercontent.com/naheim/paleosizePaper/master/rawDataFiles/bodySizes.txt')
 timescale <- read.delim(file='https://raw.githubusercontent.com/naheim/paleosizePaper/master/rawDataFiles/timescale.txt')
+nBins <- nrow(timescale)
 ````
 
 2) Extract all genera alive during the *_Maastrichtian_*, the last stage of the Cretaceous Period.
@@ -229,7 +230,79 @@ boxplot(maas$logVolume ~ maas$pred, notch=TRUE, names=c("non-predators","predato
 
 In the above line, ``notch=TRUE`` adds the notches on the boxes, which indicate 95% confidence intervals on the mean. Because the notches of the two boxes do not overlap along the y-axis, we are more than 95% confidence the the median size of predators is larger than the median size of non-predators! Finally, ``las=1`` makes the y-axis numbers horizontal.
 
+## Timeseries of extinction selectivity
+Let's calculate the log-odds of extinction for body size and feeding mode simultaneously. We'll use the same glm equation used in the section above ``glm.eqn <-"extinct ~ logVolume + pred"``. We'll write a loop (as with the t-test) and store the log-odds for both body size and feeding mode in a data frame. Finally, we'll plot both sets of selectivity coefficients in seperate plots.
+
+```` r
+# we will use the master data frames we loaded above (timescale and sizeData). 
+# we need to add the pred colum to the main sizeData data frame
+# make new column for binary feeding mode (1 = predator; 0 = non-predator)
+sizeData$pred <- 0 # set all values to 0
+sizeData$pred[sizeData$feeding == 5] <- 1 # this changes our code to 1 for those that have feeding mode 5
+
+# make new column with lo1g10-transformation of body size
+sizeData$logVolume <- log10(sizeData$max_vol)
+
+# the logistic equation (same as above)
+glm.eqn <-"extinct ~ logVolume + pred"
+
+# set up dataframe with results
+extSelect <- data.frame(interval_name=timescale$interval_name, age_mid=timescale$age_mid, size_coef=NA, size_minus=NA, size_plus=NA, pred_coef=NA, pred_minus=NA, pred_plus=NA)
+
+# loop througe each time interval
+for(i in 1:(nBins-1)) { # i dropped the last time interval because it's value is anamolous
+	# select taxa extant in i-th inteval
+	tempTaxa <- subset(sizeData, fad_age > timescale$age_top[i] & lad_age < timescale$age_bottom[i])
+	
+	# now we need to identify and mark which taxa go extinct in this interval
+	tempTaxa$extinct <- 0 # default to survivor
+	tempTaxa$extinct[tempTaxa$lad_age >= timescale$age_top[i] & tempTaxa$lad_age < timescale$age_bottom[i]] <- 1 # change those that go extinct to a 1	
+	# we can only run the regression if there are multiple victims and survivors
+	# for sample-size reasons we'll only run the regression if there are 5 each
+	if(sum(tempTaxa$extinct) >= 5 & nrow(tempTaxa) - sum(tempTaxa$extinct) >= 5) {
+		# run regression
+		tempGlm <- glm(glm.eqn, family=binomial(logit), data=tempTaxa)
+		
+		# calculate confidence intervals
+		tempCi <- confint(tempGlm)
+		
+		# fill in dataframe
+		extSelect$size_coef[i] <- tempGlm$coefficients[2] # look at tempGlm$coefficients to convince yourself that the size coefficient is the second value
+		extSelect$size_minus[i] <- tempCi[2,1] # look at tempCi to convince yourself that the size lower confidince limit is in the second row, first column
+		extSelect$size_plus[i] <- tempCi[2,2]
+		
+		extSelect$pred_coef[i] <- tempGlm$coefficients[3] 
+		extSelect$pred_minus[i] <- tempCi[3,1] 
+		extSelect$pred_plus[i] <- tempCi[3,2] 
+	}
+}
+
+#####
+
+YOU WILL GET SOME WARNINGS AND MESSAGES IN RED, YOU CAN IGNORE THEM
+
+````
+### Let's plot!
+
+Here we'll set up a single plot windown with two panes, one on top of the other. The top pane will contain our results for the size selectivity and the bottom pane the results for feeding selectivity. We set this up by telling R to divide the plot window into a grid with two rows and one column. We do that by adding the following to *par()*: ``mfrow=c(2,1)``. When working with more than one pane in a plot window, R puts the first plot command in the first cell (1,1) the fills panes along each row from left to rignt before going to the next row down. To get R to start plotting in a new pane, all you need to do is call another plot function (e.g., *plot(), boxplot(), barplot()*). 
+
+```` r
+quartz(height=12, width=10) # open up a rectangular window
+par(las=1, pch=16, mfrow=c(2,1)) #set some basic parameters, including the two panes
+
+# size selectivity
+plot(extSelect$age_mid, extSelect$size_coef, xlim=c(541,0), ylim=range(c(extSelect$size_minus, extSelect$size_plus), na.rm=TRUE), xlab="Geological time (Ma)", ylab="Log-odds of extinction (size)") # the points, notice we used the confidernce intervals values to set the y-limits of the graph
+segments(extSelect$age_mid, extSelect$size_minus, extSelect$age_mid, extSelect$size_plus, lwd=0.75) # the condidence intervals
+abline(h=0, lty=2) # a horizontal line at y=0
+
+# feeding selectivity. notice by calling plot() again, we've started filling in the lower pane
+plot(extSelect$age_mid, extSelect$pred_coef, xlim=c(541,0), ylim=range(c(extSelect$pred_minus, extSelect$pred_plus), na.rm=TRUE), xlab="Geological time (Ma)", ylab="Log-odds of extinction (feeding)") # the points, notice we used the confidernce intervals values to set the y-limits of the graph
+segments(extSelect$age_mid, extSelect$pred_minus, extSelect$age_mid, extSelect$pred_plus, lwd=0.75) # the condidence intervals
+abline(h=0, lty=2) # a horizontal line at y=0
+```` 
+
 ## Bonus Section: Exploring The Logistic Function
+
 In this section we will make a multi-panel plot that shows how the shape of the logistic curve changes as the difference between "success" and "failure" increases. In the 9 panels below, the 0 values are the same. In the middle panel the 0 and 1 values are the same. In the previous panels, the 1 values are *decreased* by a constant; in the following panesls, the 1 values are *incrased* by a constant.
 
 ````r
