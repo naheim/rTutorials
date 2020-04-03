@@ -1,3 +1,76 @@
+# EXTINCTION SELECTIVITY
+Much of the reserach and writing that have been done about extinction have focused on the magnitude of extinction—that is the number or precentage of species that go extinct. Another aspect of extintion that paleontologists and conservation biologists want to explore is extinction *selectivity*. Selectivity refers to systematic differences between species that go extinct and those that survive. Selectivity is important because is potentially related to ecological change. 
+
+Consider, for example, a hypothetical rocky intertidal zone with 35 species with the following distribution among trophic levels: 20 species of primary producers, 10 species of grazers, and 5 species of predators. Let's now assume that the intertidal zone experiences an extinction magnitude of 20% (total loss of 7 species). If the extinction had no selectivity with respect to trophic level, then we would lose 4 primary producers, 2 grazers, and 1 predator. Though this is an important loss of species, the relative diversity of each trophic level has remained unchanged; it's possible that the ecological impact of this extinction would be minimal. Now lets consider an extinction where all 5 predators are lost along with one grazer and one primary producer. The extinction magnitude is the still 20% or 7 species, but the selectivity is quite high with predators being much harder hit than the other two tropic levels. Moreover, it is easy to imagine that the post-extinction community is quite ecologically different. 
+
+The figure below (Bush et al. 2020. *Paleobiology* 46:1–22) illustrates how extinction magnitude and selectivity combine to produce diferent post-extinctoin assemablages. Note that extinction selectivity could be measured against any number of factors. The common factors used for invertebrate paleontology include higher taxonomy, body size, feeding mode, and motility level, though any factor or combination of factors could be used. Also keep in mind that an extinction event might be selective with resprect to some factors but not others. 
+
+![Fig 1 from: Bush, A., Wang, S., Payne, J., Heim, N. (2020). A framework for the integrated analysis of the magnitude, selectivity, and biotic effects of extinction and origination Paleobiology  46(1):1–22.](logisticFigures/BushEtAl2020Fig1.png)
+
+In this tutorial we'll explore two different ways of measureing extinction selectivity and for both we'll use body size as the factor we're measuring selectivity against. The two methods are comparing mean values of victims and survivors using a t-test and logistic regression. We'll start with the former, because it's simpler.
+
+# Victims vs. Survivors
+If an extinction even is not selective with repsect to body size, then we would expect that the average size of victims and the average size of survivors would be the same (i.e., their difference would be zero). However, if the extinction were selective we would expect the difference in mean sizes to be either smaller or larger than zero. It turns out that calculate the difference between two means with confidence intervals is pretty striaght forward. We will use a t-test.
+
+In the following dicussion and analyses, we will be considering selectivity in terms of the size of victims. This means that when we compute differences in mean size, we will always be subtracting survivors from victims (V - S). Thus, when the difference is positive, it means that victims were larger than survivors and when the difference is negatime, it means that the victims were smaller than survivors. As long as you're consistent, there is no reason you couldn't switch it around, but we're doing it this way. 
+
+### Read in the data
+We will use the body size data of Heim et al. (2015) that we've used so often in these tutorials. 
+
+```` r
+# read in size and timescale data files
+sizeData <- read.delim(file='https://stacks.stanford.edu/file/druid:rf761bx8302/supplementary_data_file.txt')
+head(sizeData) # look at your data to make sure it looks like you expect
+
+timescale <- read.delim(file='https://raw.githubusercontent.com/naheim/paleosizePaper/master/rawDataFiles/timescale.txt')
+# for this analysis, we're going to drop the Pleistocene and Holocene, because they are very short intervals and don't have a lot of extinction. It'll just make life easier.
+timescale <- droplevels(subset(timescale, age_bottom >= 3.6))
+head(timescale) # look at your data to make sure it looks like you expect
+nBins <- nrow(timescale) # number of time intevals
+
+
+````
+
+### Set up variables and construct loop to calculate mean sizes
+```` r
+# set up data frame for storing results
+selectivity <- data.frame(int_name=timescale$interval_name, age_mid=timescale$age_mid, mean_diff=NA, ci_minus=NA, ci_plus=NA, p_value=NA)
+
+#set up loop
+for(i in 1:nBins) {
+	victims <- subset(sizeData, lad_age >= timescale$age_top[i] & lad_age < timescale$age_bottom[i]) #genera whose LAD is within the i-th interval
+	survivors <- subset(sizeData, lad_age < timescale$age_top[i] & fad_age > timescale$age_top[i]) #genera whose LAD is younger than the i-th interval and FAD is within or older than the i-th interval
+	
+	# the t-test
+	# notice the order of victims and surviors
+	# also notice that you don't need to calculate the mean, the function will do it for you
+	# for sample size reasons, we will only calcualte selectivity if there are at least 5 victims and 5 survivors.
+	if(nrow(victims) >= 5 & nrow(survivors) >= 5) { 
+		ttest <- t.test(victims$log10_volume, survivors $log10_volume)
+		
+		selectivity$mean_diff[i] <- ttest$estimate[1] - ttest$estimate[2]
+		selectivity$ci_minus[i] <- ttest$conf.int[1]
+		selectivity$ci_plus[i] <- ttest$conf.int[2]
+		selectivity$p_value[i] <- ttest$p.value
+	}
+}
+````
+
+# plot the data to see how much selectivity there was
+The plot that we're going to make will have geological time on the x-axis and the mean differnce between victims and survivors (V - S) on the y-axis. There will be a dashed horzontal line at y = 0 to indicate no selectivity. Each point will the be average difference between victims and survivors with 95% confidence intervals. In general, we would say that if the confidence crosses the 0-line, that there was not significant selectivity during that interval. If a point and its confidence interval are above the 0-line, then we sould say that victims were significantly larger than survivors. If a point and its confidence interval are below the 0-line, then we sould say that victims were significantly smaller than survivors. 
+
+```` r
+quartz(height=7, width=10) # open up a rectangular window
+par(las=1, pch=16) #set some basic parameters
+plot(selectivity$age_mid, selectivity$mean_diff, xlim=c(541,0), ylim=range(c(selectivity$ci_plus, selectivity$ci_minus), na.rm=TRUE), xlab="Geological time (Ma)", ylab=expression(paste(Delta, " Mean body size (log"[10],"mm"^3,")"))) # the points, notice we used the confidernce intervals values to set the ylimits of the graph
+segments(selectivity$age_mid, selectivity$ci_minus, selectivity$age_mid, selectivity$ci_plus, lwd=0.75) # the condidence intervals
+abline(h=0, lty=2) # a horizontal line at y=0
+````
+
+Notice that selectivity varies over time, but that is becoms increasingly negative from the Late Cretaceous towards the recent, meaning that genera that have gone extinct during the last 100 million years have tended to be smaller than those that survive.
+
+Using a simple t-test is a great way to explore basic selectivity patterns, but it has some limitations. A more sophisticated way of looking at extinction selectivity is with logistic regression.
+
 # Logistic Regression
 (some of this was borrowed from an online source, but I no longer remember what it was :flushed:. Appologies and thanks to the orgianl author of the text I've reused.)
 ## Odds, Odds Ratios, and Logit
@@ -54,8 +127,8 @@ Load the paleosize data file that is in ``paleosizePaper/rawDataFiles`` director
 
 ````r
 # read in size and timescale data files
-sizeData <- read.delim('bodySizes.txt') 
-timescale <- read.delim('timescale.txt') 
+sizeData <- read.delim(file='https://stacks.stanford.edu/file/druid:rf761bx8302/supplementary_data_file.txt')
+timescale <- read.delim(file='https://raw.githubusercontent.com/naheim/paleosizePaper/master/rawDataFiles/timescale.txt')
 ````
 
 2) Extract all genera alive during the *_Maastrichtian_*, the last stage of the Cretaceous Period.
